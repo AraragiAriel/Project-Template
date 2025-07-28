@@ -23,18 +23,18 @@ public class VolumeSlider : MonoBehaviour
 
     private void Start(){
         float value =  bgm ? 
-            ResourcesSystem.data.gameSettings.bgmVolume :
-            ResourcesSystem.data.gameSettings.sfxVolume;
+            Res.data.gameSettings.bgmVolume :
+            Res.data.gameSettings.sfxVolume;
         slider.value = value;
         SetText(value);
     }
 
     private void SliderChange(float value){
-        value = Utilities.SetDigits(value, 2, true);
+        value = Util.SetDigits(value, 2, true);
         if(bgm)
-            ResourcesSystem.data.gameSettings.bgmVolume = value;
+            Res.data.gameSettings.bgmVolume = value;
         else
-            ResourcesSystem.data.gameSettings.sfxVolume = value;
+            Res.data.gameSettings.sfxVolume = value;
         GameSettingsManager.instance.Apply();
         SetText(value);
     }

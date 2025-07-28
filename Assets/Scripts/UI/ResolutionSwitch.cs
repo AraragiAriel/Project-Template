@@ -21,7 +21,7 @@ public class ResolutionSwitch : MonoBehaviour
         foreach(Vector2Int resolution in GameSettingsManager.resolutionsList)
             resolutions.Add(resolution.x + "X" + resolution.y);
         
-        selector.Set(resolutions, ResourcesSystem.data.gameSettings.selectedResolution);
+        selector.Set(resolutions, Res.data.gameSettings.selectedResolution);
         setDone = true;
     }
 
@@ -29,7 +29,7 @@ public class ResolutionSwitch : MonoBehaviour
         if(!setDone)
             return;
             
-        ResourcesSystem.data.gameSettings.selectedResolution = id;
+        Res.data.gameSettings.selectedResolution = id;
         GameSettingsManager.instance.Apply();
     }
 }

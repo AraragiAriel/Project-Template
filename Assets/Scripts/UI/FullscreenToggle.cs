@@ -14,7 +14,7 @@ public class FullscreenToggle : MonoBehaviour
     }
 
     private void Start(){
-        toggle.Set(ResourcesSystem.data.gameSettings.fullscreen);
+        toggle.Set(Res.data.gameSettings.fullscreen);
         setDone = true;
     }
 
@@ -22,7 +22,7 @@ public class FullscreenToggle : MonoBehaviour
         if(!setDone)
             return;
 
-        ResourcesSystem.data.gameSettings.fullscreen = toggle;
+        Res.data.gameSettings.fullscreen = toggle;
         GameSettingsManager.instance.Apply();
     }
 }

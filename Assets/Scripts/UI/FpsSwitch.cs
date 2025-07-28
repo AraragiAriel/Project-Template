@@ -20,7 +20,7 @@ public class FpsSwitch : MonoBehaviour
         foreach(LocalizedStringData data in strings)
             aux.Add(data.localizedString);
         
-        selector.Set(aux, ResourcesSystem.data.gameSettings.selectedFps);
+        selector.Set(aux, Res.data.gameSettings.selectedFps);
         setDone = true;
     }
 
@@ -28,7 +28,7 @@ public class FpsSwitch : MonoBehaviour
         if(!setDone)
             return;
             
-        ResourcesSystem.data.gameSettings.selectedFps = id;
+        Res.data.gameSettings.selectedFps = id;
         GameSettingsManager.instance.Apply();
     }
 }

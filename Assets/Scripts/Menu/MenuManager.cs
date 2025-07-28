@@ -71,7 +71,7 @@ public class MenuManager : MonoBehaviour
 
     public void QuitGame(){
         if(mainScreen.interactable){
-            ConfirmationBox.OpenBox(new ConfirmationBoxParameters(ResourcesSystem.String("Confirm Quit"), ConfirmQuit));
+            ConfirmationBox.OpenBox(new ConfirmationBoxParameters(Res.String("Confirm Quit"), ConfirmQuit));
         } else {
             OpenMainScreen();
         }

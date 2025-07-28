@@ -20,16 +20,16 @@ public class SaveMenu : MonoBehaviour
     }
 
     public void Play(){
-        ResourcesSystem.data.currentSave.saveSO = save;
-        SceneChanger.instance.ChangeScene(SceneType.Store);
+        Res.data.currentSave.saveSO = save;
+        SceneChanger.instance.ChangeScene(SceneType.Main);
     }
 
     public void Delete(){
-        ConfirmationBox.OpenBox(new ConfirmationBoxParameters(ResourcesSystem.String("Delete Save Box"), ConfirmDelete));
+        ConfirmationBox.OpenBox(new ConfirmationBoxParameters(Res.String("Delete Save Box"), ConfirmDelete));
     }
 
     public void ConfirmDelete(){
-        ConfirmationBox.OpenBox(new ConfirmationBoxParameters(ResourcesSystem.String("Really Delete Save Box"), ReallyConfirm));
+        ConfirmationBox.OpenBox(new ConfirmationBoxParameters(Res.String("Really Delete Save Box"), ReallyConfirm));
     }
 
     public void ReallyConfirm(){

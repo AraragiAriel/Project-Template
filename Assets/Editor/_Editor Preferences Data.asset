@@ -12,13 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12331841ca375bb46a79c7251229a8c8, type: 3}
   m_Name: _Editor Preferences Data
   m_EditorClassIdentifier: 
-  disableMeleeDamage: 0
-  disableExpireDamage: 0
-  disableDeath: 0
-  disableShooting: 0
-  disableEnemySpawn: 0
-  enableOverloadWithoutChallenge: 0
-  disableSteam: 0
-  disableDiscord: 0
+  debugStateMachine: 0
+  disableSteam: 1
+  disableDiscord: 1
   disableMagnetTutorial: 0
   disableComboUnlockScreen: 0

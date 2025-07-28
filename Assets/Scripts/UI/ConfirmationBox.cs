@@ -19,7 +19,7 @@ public struct ConfirmationBoxParameters{
 public class ConfirmationBox : MonoBehaviour
 {
     public static void OpenBox(ConfirmationBoxParameters parameters){
-        Instantiate(ResourcesSystem.data.confirmationBox, Vector3.zero, Quaternion.identity).SetBox(parameters);
+        Instantiate(Res.data.confirmationBox, Vector3.zero, Quaternion.identity).SetBox(parameters);
     }
 
     [SerializeField] private TextMeshProUGUI description;
