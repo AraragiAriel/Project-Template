@@ -11,6 +11,7 @@ public static class StaticActions
 
     // CURRENCY
     public static Action<CurrencyAmount, CurrencyAmount> OnCurrencyChange; // new amount, added amount
+    public static Action<UpgradeData> OnBuyUpgrade;
 
     // SCENE
     public static Action<SceneType> OnSceneBeginChange; // scene before

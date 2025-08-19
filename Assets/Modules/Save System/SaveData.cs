@@ -7,4 +7,5 @@ public class SaveData
 {
     public CurrencySave currencySave = new();
     public AchievementSave achievementSave = new();
+    public UpgradeSave upgradeSave = new();
 }

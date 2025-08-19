@@ -19,9 +19,12 @@ public class ResourcesData : ScriptableObject
     public List<CurrencyData> currenciesData = new();
     public Popup popup;
     public ConfirmationBox confirmationBox;
+    public StatsData statsData;
+    public UpgradesData upgradesData;
 
     #if UNITY_EDITOR
     [Header("Editor")]
     public EditorPreferencesData editorPreferences;
+    public StatsOffsetData offsetData;
     #endif
 }
