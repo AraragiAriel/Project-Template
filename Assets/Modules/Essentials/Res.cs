@@ -3,7 +3,7 @@ using UnityEngine;
 public static class Res
 {
     public static ResourcesData data;
-    public static SaveData save => data.currentSave.saveSO.data;
+    public static SaveData save => data.currentSave.saveContainer.data;
     # if UNITY_EDITOR
     public static EditorPreferencesData editor => data.editorPreferences;
     # endif

@@ -8,19 +8,25 @@ public class ResourcesData : ScriptableObject
     [Header("Options")]
     public bool demo;
 
-    [Space(20)]
-
+    [Header("Data")]
     public CurrentSave currentSave;
     public GameSettingsData gameSettings;
-    public AudioSourceManager audioSourcePrefab;
     public ScenePersistentData scenePersistentData;
-    public AfterEffect afterEffect;
-    public GameObject spriteShadow;
-    public List<CurrencyData> currenciesData = new();
-    public Popup popup;
-    public ConfirmationBox confirmationBox;
+    public CurrenciesData currenciesData;
     public StatsData statsData;
     public UpgradesData upgradesData;
+    public UIDs uids;
+
+    [Header("Prefabs")]
+    public AudioSourceManager audioSourcePrefab;
+    public GameObject spriteShadow;
+    public AfterEffect afterEffect;
+    public Popup popup;
+
+    [Header("UI")]
+    public ConfirmationBox confirmationBox;
+
+    [Header("Tooltips")]
 
     #if UNITY_EDITOR
     [Header("Editor")]

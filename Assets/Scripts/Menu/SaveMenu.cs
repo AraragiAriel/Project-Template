@@ -3,7 +3,7 @@ using TMPro;
 
 public class SaveMenu : MonoBehaviour
 {
-    [SerializeField] private SaveSO save;
+    [SerializeField] private SaveDataContainer save;
     [SerializeField] private GameObject playButton;
     [SerializeField] private GameObject createButton;
     [SerializeField] private GameObject deleteButton;
@@ -20,7 +20,7 @@ public class SaveMenu : MonoBehaviour
     }
 
     public void Play(){
-        Res.data.currentSave.saveSO = save;
+        Res.data.currentSave.saveContainer = save;
         SceneChanger.instance.ChangeScene(SceneType.Main);
     }
 

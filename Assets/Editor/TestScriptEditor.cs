@@ -9,6 +9,8 @@ public class TestScriptEditor : Editor
     public override void OnInspectorGUI(){
         base.OnInspectorGUI();
 
+        GUILayout.Space(16);
+
         TestScript script = target as TestScript;
 
         if(GUILayout.Button("Func1")){

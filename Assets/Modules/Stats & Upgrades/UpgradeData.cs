@@ -29,7 +29,7 @@ public class UpgradeData : ScriptableObject
 
     [Header("Data")]
     public int maxLevel = 10;
-    public CurrencyAmount initialCost = new CurrencyAmount(Currency.Drop, 1);
+    public CurrencyAmount initialCost = new CurrencyAmount(Currency.Null, 0);
     public int costIncrease;
     public List<Requirement> requirements = new();
 
@@ -39,7 +39,7 @@ public class UpgradeData : ScriptableObject
     [Header("Stat")]
     public Stat stat;
     public float valuePerLevel;
-    public bool percent;
+    public ValueMod.Type valueModType;
 
     
     [Space]
@@ -54,12 +54,10 @@ public class UpgradeData : ScriptableObject
     public CurrencyAmount cost => Cost(level);
     public CurrencyAmount Cost(int level){
         float multiplier = 1f;
-        if(initialCost.type == Currency.Drop || initialCost.type == Currency.C_oin){
-            try{
-                Stat discount = Res.data.statsData.GetStat("33a7850f010b6f74fa84ca1ce3e94954");
-                multiplier = 1f - discount;
-            } catch {}
-        }
+        try{
+            Stat discount = Res.data.statsData.GetStat("33a7850f010b6f74fa84ca1ce3e94954");
+            multiplier = 1f - discount;
+        } catch {}
         if(level >= maxLevel)
             return new CurrencyAmount(Currency.Null, 0);
         else{

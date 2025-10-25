@@ -5,7 +5,7 @@ using DG.Tweening;
 public class MenuManager : MonoBehaviour
 {   
     [SerializeField] private CanvasGroup mainScreen, settingsScreen, saveScreen, creditsScreen;
-    [SerializeField] private ParticleSystem ps1, ps2;
+    // [SerializeField] private ParticleSystem ps1, ps2;
 
     [Header("Tween")]
     [SerializeField] private float duration;
@@ -16,37 +16,35 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private string twitterLink;
 
     private void Start(){
+        CloseAll(true);
         FadeIn(mainScreen, true);
-        FadeOut(saveScreen, true);
-        FadeOut(settingsScreen, true);
-        FadeOut(creditsScreen, true);
     }
 
-    public void OpenMainScreen(){
-        CloseAll();
-        FadeIn(mainScreen);
+    public void OpenMainScreen(bool insta = false){
+        CloseAll(insta);
+        FadeIn(mainScreen, insta);
     }
 
-    public void OpenSaveScreen(){
-        CloseAll();
-        FadeIn(saveScreen);
+    public void OpenSaveScreen(bool insta = false){
+        CloseAll(insta);
+        FadeIn(saveScreen, insta);
     }
 
-    public void OpenSettingsScreen(){
-        CloseAll();
-        FadeIn(settingsScreen);
+    public void OpenSettingsScreen(bool insta = false){
+        CloseAll(insta);
+        FadeIn(settingsScreen, insta);
     }
 
-    public void OpenCreditsScreen(){
-        CloseAll();
-        FadeIn(creditsScreen);      
+    public void OpenCreditsScreen(bool insta = false){
+        CloseAll(insta);
+        FadeIn(creditsScreen, insta);
     }
 
-    private void CloseAll(){
-        FadeOut(mainScreen);
-        FadeOut(saveScreen);
-        FadeOut(settingsScreen);
-        FadeOut(creditsScreen);
+    private void CloseAll(bool insta = false){
+        FadeOut(mainScreen, insta);
+        FadeOut(saveScreen, insta);
+        FadeOut(settingsScreen, insta);
+        FadeOut(creditsScreen, insta);
     }
 
     private void FadeIn(CanvasGroup canvasGroup, bool insta = false){
@@ -54,15 +52,23 @@ public class MenuManager : MonoBehaviour
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
         canvasGroup.DOKill();
-        canvasGroup.DOFade(1f, insta ? 0f : duration).SetEase(ease);
+        if(!insta)
+            canvasGroup.DOFade(1f, duration).SetEase(ease);
+        else
+            canvasGroup.alpha = 1f;
     }
 
     private void FadeOut(CanvasGroup canvasGroup, bool insta = false){
-        // canvasGroup.gameObject.SetActive(false);
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
         canvasGroup.DOKill();
-        canvasGroup.DOFade(0f, insta ? 0f : duration*fadeOutMult).SetEase(ease);
+        if(!insta)
+            canvasGroup.DOFade(0f, duration*fadeOutMult).SetEase(ease)
+                .onComplete = () => canvasGroup.gameObject.SetActive(false);
+        else {
+            canvasGroup.alpha = 0f;
+            canvasGroup.gameObject.SetActive(false);
+        }
     }
 
     public void OpenTwitter(){

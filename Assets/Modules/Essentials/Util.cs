@@ -4,6 +4,11 @@ using UnityEngine;
 using System.Globalization;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
+using System.Linq;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public static class Util
 {
@@ -11,7 +16,7 @@ public static class Util
     public const int defaultInspectorSpace = 16;
 
     public static void Debug(string s){
-        UnityEngine.Debug.Log(s + " | (" + UnityEngine.Random.Range(1,100) + ")");
+        UnityEngine.Debug.Log($"{s} | ({UnityEngine.Random.Range(1,1000)})");
     }
 
     public static Vector2 AngleToVector(float angle){
@@ -27,18 +32,20 @@ public static class Util
 
     public static void DestroyAllChildren(Transform t){
         int count = t.childCount;
-        for(int i = count - 1; i >= 0; i--)
-            GameObject.Destroy(t.GetChild(i).gameObject);
+        for(int i = count - 1; i >= 0; i--){
+            #if UNITY_EDITOR
+                if(!EditorApplication.isPlaying)
+                    GameObject.DestroyImmediate(t.GetChild(i).gameObject);
+                else
+                    GameObject.Destroy(t.GetChild(i).gameObject);
+            #else
+                GameObject.Destroy(t.GetChild(i).gameObject);
+            #endif
+        }
     }
 
-    public static void DestroyAllChildrenImmediately(Transform t){
-        int count = t.childCount;
-        for(int i = count - 1; i >= 0; i--)
-            GameObject.DestroyImmediate(t.GetChild(i).gameObject);
-    }
-
-    public static string Concat(float value, bool allowDecimal, bool round = true){
-        value = SetDigits(value, 3, round);
+    public static string Concat(float value, bool allowDecimal, int digits = 3, bool round = true){
+        value = SetDigits(value, digits, round);
         string format = "0.##";
 
         string[] suffixes = {"", "K", "M", "B", "T"};
@@ -96,6 +103,7 @@ public static class Util
         return floats;
     }
 
+    // Calcula decomposição de valor em quantidade de moedas
     public static List<int> ToDrop(List<int> values, int amount){
         List<int> toDrop = new();      
         for(int i = values.Count - 1; i >= 0; i--){
@@ -110,6 +118,8 @@ public static class Util
         return toDrop;
     }
 
+    public static List<T> EnumList<T>() where T : System.Enum => System.Enum.GetValues(typeof(T)).Cast<T>().ToList();
+
     #region RANDOM
 
     public static Vector2 randDir{
@@ -123,10 +133,28 @@ public static class Util
     }
     public static Vector2 randPos => randDir*UnityEngine.Random.Range(0f, 1f);
     public static int randSign => UnityEngine.Random.Range(0, 2) == 0 ?  1 : -1;
-    public static bool randBool => RandBool(.5f);
-    public static bool RandBool(float chance) => UnityEngine.Random.Range(0f, 1f) <= chance;
+    public static bool randBool => ChanceCheck(.5f);
+    public static bool ChanceCheck(float chance) => UnityEngine.Random.Range(0f, 1f) <= chance;
     public static float RandMult(float range) => UnityEngine.Random.Range(1f - range, 1f + range);
-    public static float randMult => RandMult(.25f);
+    public static float randMult => RandMult(.15f);
+    public static int DrawWeightedIndex(List<float> chances){
+        float sum = chances.Sum();
+        if(sum <= 0f){
+            UnityEngine.Debug.LogWarning("Total weighted chances not positive");
+            return 0;
+        }
+
+        float mult = 1f/sum;
+        float partial = 0f;
+        float rand = Random.Range(0f, 1f);
+        foreach(int i in 0.To(chances.Count - 1)){
+            partial += chances[i]*mult;
+            if(partial >= rand)
+                return i;
+        }
+        UnityEngine.Debug.LogWarning("Couldn't draw position");
+        return 0;
+    }
 
     #endregion
 
@@ -149,6 +177,21 @@ public static class Util
                 list.RemoveAt(i);
     }
 
+    public static void RemoveRand<T>(this IList<T> list){
+        list.RemoveAt(Random.Range(0, list.Count));
+    }
+
+    public static void RemoveTill<T>(this IList<T> list, int till){
+        while(list.Count > till)
+            list.RemoveRand();
+    }
+
+    public static T Pop<T>(this IList<T> list){
+        T t = list.Rand();
+        list.Remove(t);
+        return t;
+    }
+
     public static void SetAlpha(this Image image, float alpha){
         var aux = image.color;
         aux.a = alpha;
@@ -168,6 +211,7 @@ public static class Util
     
     public static bool Even(this int i) => i % 2 == 0;
     public static bool Odd (this int i) => i % 2 == 1;
+    public static int Next (this int i, int max) => i + 1 > max ? 0 : i +1;
 
     public static void SetGradient(this Gradient gradient, Color color1, Color color2) =>
         gradient.SetGradient(color1, color2, color1.a, color2.a);
@@ -242,6 +286,21 @@ public static class Util
         }   
         public IEnumerator<KeyValuePair<T1, T2>> GetEnumerator() => forward.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    [System.Serializable]
+    public class WeightedList<T>{
+        [System.Serializable]
+        public class Item<T1>{
+            public T1 obj;
+            public float weight;
+        }
+        public List<Item<T>> items;
+
+        public T Draw(){
+            int id = DrawWeightedIndex(items.Select(i => i.weight).ToList());
+            return items[id].obj;
+        }
     }
 
     #endregion

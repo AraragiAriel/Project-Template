@@ -8,7 +8,7 @@ using UnityEditor;
 public class SaveTrigger : MonoBehaviour
 {
     private void Awake(){
-        Res.data.currentSave.saveSO.Load();
+        Res.data.currentSave.saveContainer.Load();
     }
 
     private void OnEnable(){
@@ -41,7 +41,7 @@ public class SaveTrigger : MonoBehaviour
 
     private IEnumerator SaveCo(){
         yield return new WaitForEndOfFrame();
-        Res.data.currentSave.saveSO.Save();
+        Res.data.currentSave.saveContainer.Save();
     }
 
     #if UNITY_EDITOR

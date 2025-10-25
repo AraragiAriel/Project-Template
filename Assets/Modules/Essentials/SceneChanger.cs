@@ -10,7 +10,7 @@ public enum SceneType{
 }
 
 public enum SceneChangeAnimType{
-    Default = 0,
+    None = 0,
 }
 
 public class SceneChanger : MonoBehaviour
@@ -49,7 +49,7 @@ public class SceneChanger : MonoBehaviour
         StaticActions.OnSceneChange?.Invoke(currentScene);
     }
     
-    public void ChangeScene(SceneType scene, SceneChangeAnimType anim = SceneChangeAnimType.Default){
+    public void ChangeScene(SceneType scene, SceneChangeAnimType anim = SceneChangeAnimType.None){
         if(duringSceneChange)
             return;
 
@@ -59,14 +59,12 @@ public class SceneChanger : MonoBehaviour
 
     private IEnumerator ChangeSceneCo(SceneType scene, SceneChangeAnimType animType){
         SceneChangeAnim anim = anims.Find(a => a.type == animType);
-        if(anim == null){
-            Debug.LogWarning("Scene change anim not found");
-            anim = anims[0];
-        }
+        bool skipAnim = anim == null || animType == SceneChangeAnimType.None;
         duringSceneChange = true;
         StaticActions.OnSceneBeginChange?.Invoke(currentScene);
 
-        yield return StartCoroutine(anim.FadeIn());
+        if(!skipAnim)
+            yield return StartCoroutine(anim.FadeIn());
 
         StaticActions.OnSceneUnload?.Invoke(currentScene);
         currentScene = scene;
@@ -82,6 +80,7 @@ public class SceneChanger : MonoBehaviour
         duringSceneChange = false;
         StaticActions.OnSceneChange?.Invoke(currentScene);
 
-        yield return StartCoroutine(anim.FadeOut());
+        if(!skipAnim)
+            yield return StartCoroutine(anim.FadeOut());
     }
 }

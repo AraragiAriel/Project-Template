@@ -12,9 +12,12 @@ public static class Initializer
     [InitializeOnLoadMethod]
     # endif
     private static void Initialize(){
+        Res.Initialize();
         GameStateManager.Initialize();
         RID.Initialize();
         DOTween.SetTweensCapacity(1250, 125);
-        Res.Initialize();
+
+        // POPULATE DICTS
+        Res.data.uids.Populate();
     }
 }

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 public class StatsManager : MonoBehaviour
 {
-    private readonly string id = "statOffset";
+    private RID id = new();
 
     private static StatsManager instance;
-    private bool initialized = false;
 
     private void Awake(){
         if(instance != null){
@@ -16,9 +15,16 @@ public class StatsManager : MonoBehaviour
             instance = this;
             transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
-            initialized = true;
         }
     
+        Reset();
+    }
+
+    private void OnDestroy(){
+        Reset();
+    }
+
+    public void Reset(){
         foreach(Stat stat in Res.data.statsData.stats)
             stat.Initialize();
 
@@ -26,14 +32,8 @@ public class StatsManager : MonoBehaviour
         foreach(StatOffset statOffset in Res.data.offsetData.offsets){
             if(statOffset.stat == null || statOffset.offset == 0f)
                 continue;
-            statOffset.stat.SetModifier(id, statOffset.offset, false);
+            statOffset.stat.SetModifier(new ValueMod(id, statOffset.offset, ValueMod.Type.Flat));
         }
         #endif
-    }
-
-    private void OnDestroy() {
-        if(initialized)
-            foreach(Stat stat in Res.data.statsData.stats)
-                stat.Initialize();
     }
 }

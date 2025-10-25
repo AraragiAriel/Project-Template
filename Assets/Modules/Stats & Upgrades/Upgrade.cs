@@ -67,7 +67,7 @@ public class Upgrade : MonoBehaviour
         if(data == this.data)
             SetEffect();
     }
-    private void OnCurrencyChange(CurrencyAmount newAmount, CurrencyAmount change) => SetState();
+    private void OnCurrencyChange(Currency c, Variation v) => SetState();
 
     private void SetState(){
         if(data.maxedOut){
@@ -94,7 +94,7 @@ public class Upgrade : MonoBehaviour
             return;
 
         if(data.stat != null)
-            data.stat.SetModifier(data.uid, data.valuePerLevel*data.level, data.percent);
+            data.stat.SetModifier(new ValueMod(data.uid, data.valuePerLevel*data.level, data.valueModType));
         OnSetEffect?.Invoke(data.level);
     }
 }

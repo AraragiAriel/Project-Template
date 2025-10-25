@@ -5,10 +5,8 @@ using UnityEngine;
 
 public enum Currency{
     Null = 0,
-    Drop = 1,
-    C_oin = 2,
-    En = 3,
-    Nuc = 4,
+    Ticket = 1,
+    Token = 2,
 }
 
 [System.Serializable]
@@ -21,49 +19,70 @@ public struct CurrencyAmount{
         this.amount = amount;
     }
 
-    public CurrencyData GetData(){
-        switch(type){
-            case Currency.Drop:
-                return Res.data.currenciesData[0];
-            case Currency.C_oin:
-                return Res.data.currenciesData[1];
-            case Currency.En:
-                return Res.data.currenciesData[2];
-            case Currency.Nuc:
-                return Res.data.currenciesData[3];
-            default:
-                return Res.data.currenciesData[0];
-        }
-    }
+    public CurrencyData GetData() => CurrencyManager.GetData(type);
+
+    public static implicit operator float(CurrencyAmount ca) => ca.amount;
 }
 
 public static class CurrencyManager
 {   
+    private static List<CurrencyAmount> currencies => Res.save.currencySave.currencies;
+
     public static void AddCurrency(CurrencyAmount c){
-        Res.save.currencySave.AddCurrency(c);
-        if(!Res.save.currencySave.unlocked.Contains(c.type))
-            Res.save.currencySave.unlocked.Add(c.type);
-        StaticActions.OnCurrencyChange?.Invoke(GetCurrency(c.type), c);
+        Variation v = new();
+        v.previous = GetCurrency(c.type);
+        bool found = false;
+        for(int i = 0; i < currencies.Count; i++){
+            if(currencies[i].type == c.type){
+                currencies[i] = new CurrencyAmount(c.type, currencies[i].amount + c.amount);
+                found = true;
+            }
+        }
+        if(!found)
+            currencies.Add(c);
+        v.current = GetCurrency(c.type);
+        StaticActions.OnCurrencyChange?.Invoke(c.type, v);
+        StaticActions.OnEconUpdate?.Invoke();
     }
 
     public static bool SpendCurrency(CurrencyAmount c){
-        bool spent = Res.save.currencySave.SpendCurrency(c);
-        if(spent){
-            c.amount = -c.amount;
-            StaticActions.OnCurrencyChange?.Invoke(GetCurrency(c.type), c);
+        if(!HasEnoughCurrency(c))
+            return false;
+
+        Variation v = new();
+        v.previous = GetCurrency(c.type);
+        for(int i = 0; i < currencies.Count; i++){
+            if(currencies[i].type == c.type){
+                currencies[i] = new CurrencyAmount(c.type, currencies[i].amount - c.amount);
+                break;
+            }
+        }     
+        v.current = GetCurrency(c.type);
+        StaticActions.OnCurrencyChange?.Invoke(c.type, v);
+        StaticActions.OnEconUpdate?.Invoke();
+        return true;
+    }
+
+    public static void SetCurrency(CurrencyAmount c){
+        Variation v = new();
+        v.previous = GetCurrency(c.type);
+        bool found = false;
+        for(int i = 0; i < currencies.Count; i++){
+            if(currencies[i].type == c.type){
+                currencies[i] = new CurrencyAmount(c.type, c.amount);
+                found = true;
+            }
         }
-        return spent;
+        if(!found)
+            currencies.Add(c);
+
+        v.current = GetCurrency(c.type);
+        StaticActions.OnCurrencyChange?.Invoke(c.type, v);
+        StaticActions.OnEconUpdate?.Invoke();
     }
 
-    public static CurrencyAmount GetCurrency(Currency c){
-        return Res.save.currencySave.GetCurrency(c);
-    }
-
-    public static bool HasEnoughCurrency(CurrencyAmount c){
-        return Res.save.currencySave.HasEnoughCurrency(c);
-    }
-
-    public static CurrencyData GetData(Currency c){
-        return new CurrencyAmount(c, 0f).GetData();
-    }
+    public static CurrencyAmount GetCurrency(Currency c) => currencies.Find(ca => ca.type == c);
+    public static bool HasEnoughCurrency(CurrencyAmount c) => GetCurrency(c.type).amount >= c.amount;
+    public static CurrencyData GetData(Currency c) => Res.data.currenciesData.Get(c);
+    
 }

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(SaveSO))]
+[CustomEditor(typeof(SaveDataContainer))]
 public class SaveSOEditor : Editor {
     public override void OnInspectorGUI(){
         base.OnInspectorGUI();
 
-        SaveSO save = (SaveSO)target;
+        SaveDataContainer save = target as SaveDataContainer;
 
         // SAVE SYSTEM
         EditorGUILayout.BeginHorizontal();

@@ -4,7 +4,7 @@ public class RID
 {
     // STATIC
     private static int lastUsed = 0;
-    public static int next{
+    private static int next{
         get{
             lastUsed++;
             return lastUsed;
@@ -30,4 +30,7 @@ public class RID
     
     public static implicit operator int(RID rid) =>
         rid != null ? rid.id : 0;
+    
+    public static implicit operator string(RID rid) =>
+        rid != null ? rid.id.ToString() : "";
 }

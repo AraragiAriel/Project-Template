@@ -1,12 +1,10 @@
 using UnityEngine;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using Odin.OdinSerializer;
-using Odin.OdinSerializer.Utilities;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "SaveData ", menuName = "ScriptableObject/Others/SaveData")]
-public class SaveSO : ScriptableObject
+public class SaveDataContainer : ScriptableObject
 {
     public string saveName;
     public SaveData data;
@@ -17,7 +15,11 @@ public class SaveSO : ScriptableObject
     }
 
     public void Save(){
-        byte[] bytes = SerializationUtility.SerializeValue(data, DataFormat.Binary);
+        var context = new SerializationContext();
+        context.Config.SerializationPolicy = SerializationPolicies.Unity;
+        context.StringReferenceResolver = new UIDAssetReferenceResolver();
+
+        byte[] bytes = SerializationUtility.SerializeValue(data, DataFormat.Binary, context);
         File.WriteAllBytes(tempPath, bytes);
 
         if(File.Exists(path))
@@ -39,8 +41,11 @@ public class SaveSO : ScriptableObject
 
     private bool Read(string path){
         try{
+            var context = new DeserializationContext();
+            context.Config.SerializationPolicy = SerializationPolicies.Unity;
+            context.StringReferenceResolver = new UIDAssetReferenceResolver();
             byte[] bytes = File.ReadAllBytes(path);
-            data = SerializationUtility.DeserializeValue<SaveData>(bytes, DataFormat.Binary);
+            data = SerializationUtility.DeserializeValue<SaveData>(bytes, DataFormat.Binary, context);
             return true;
         } catch {
             return false;
