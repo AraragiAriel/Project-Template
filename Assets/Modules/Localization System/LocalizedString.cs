@@ -6,16 +6,22 @@ public class LocalizedString{
     public List<LanguageString> strings = new();
 
     public string Localize(){
-        GameLanguage currentLanguage = Res.data.gameSettings.language;
+        try{
+            var currentLanguage = Res.data.gameSettings.language;
 
-        foreach(LanguageString languageString in strings)
-            if(languageString.language == currentLanguage)
-                return languageString.text.ToUpperInvariant();
+            string toReturn = null;
+            foreach(LanguageString languageString in strings)
+                if(languageString.language == currentLanguage){
+                    toReturn = languageString.text;
+                    break;
+                }
 
-        Debug.LogWarning("String not found");
-        if(strings[0] != null)
-            return strings[0].text;
-        return "";
+            if(!string.IsNullOrEmpty(toReturn))
+                return Res.data.colorTags.Parse(toReturn);
+            return Res.data.colorTags.Parse(strings[0].text);
+        } catch{
+            return "";
+        }
     }
 
     public static implicit operator string(LocalizedString ls) =>

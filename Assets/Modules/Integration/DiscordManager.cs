@@ -11,7 +11,7 @@ public class DiscordManager : MonoBehaviour
     private void Awake(){
 
         #if UNITY_EDITOR
-        if(Res.editor.disableDiscord){
+        if(Res.data.editorPreferences.disableDiscord){
             Destroy(gameObject);
             return;
         }

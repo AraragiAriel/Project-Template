@@ -30,21 +30,21 @@ public class StatEditor : Editor
         }
 
         GUILayout.Space(8);
-        var texture = AssetPreview.GetAssetPreview(stat.GetIcon(true));
+        var texture = AssetPreview.GetAssetPreview(stat.icon);
         GUILayout.Label(texture, GUILayout.Width(80), GUILayout.Height(80));
 
-        int dimension = 40;
-        GUILayout.BeginHorizontal();
-            foreach(UpgradeData upgrade in stat.iconPriority){
-                if(upgrade == null)
-                    continue;
-                if(upgrade.icon == null)
-                    continue;
+        // int dimension = 40;
+        // GUILayout.BeginHorizontal();
+        //     foreach(UpgradeData upgrade in stat.iconPriority){
+        //         if(upgrade == null)
+        //             continue;
+        //         if(upgrade.icon == null)
+        //             continue;
 
-                var smallTexture = AssetPreview.GetAssetPreview(upgrade.icon);
-                GUILayout.Label(smallTexture, GUILayout.Width(dimension), GUILayout.Height(dimension));
-            }
-        GUILayout.EndHorizontal();
+        //         var smallTexture = AssetPreview.GetAssetPreview(upgrade.icon);
+        //         GUILayout.Label(smallTexture, GUILayout.Width(dimension), GUILayout.Height(dimension));
+        //     }
+        // GUILayout.EndHorizontal();
     }
 
     private void ChangeSelection(bool next){

@@ -4,21 +4,24 @@ using System;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public struct ConfirmationBoxParameters{
-    public string description;
-    public Action actionIfTrue;
-    public Action actionIfFalse;
-
-    public ConfirmationBoxParameters(string description, Action actionIfTrue, Action actionIfFalse = null){
-        this.description = description;
-        this.actionIfTrue = actionIfTrue;
-        this.actionIfFalse = actionIfFalse;
-    }
-}
 
 public class ConfirmationBox : MonoBehaviour
 {
-    public static void OpenBox(ConfirmationBoxParameters parameters){
+    [Resource(ResourceAttribute.Tag.UI)] ConfirmationBox confirmationBox;
+
+    public struct Parameters{
+        public string description;
+        public Action actionIfTrue;
+        public Action actionIfFalse;
+
+        public Parameters(string description, Action actionIfTrue, Action actionIfFalse = null){
+            this.description = description;
+            this.actionIfTrue = actionIfTrue;
+            this.actionIfFalse = actionIfFalse;
+        }
+    }
+
+    public static void OpenBox(Parameters parameters){
         Instantiate(Res.data.confirmationBox, Vector3.zero, Quaternion.identity).SetBox(parameters);
     }
 
@@ -28,7 +31,7 @@ public class ConfirmationBox : MonoBehaviour
     private Action actionIfTrue, actionIfFalse;
     private bool finished = false;
 
-    public void SetBox(ConfirmationBoxParameters parameters){
+    public void SetBox(Parameters parameters){
         description.text = parameters.description;
         actionIfTrue = parameters.actionIfTrue;
         actionIfFalse = parameters.actionIfFalse;

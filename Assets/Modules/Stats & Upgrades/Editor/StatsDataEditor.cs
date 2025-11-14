@@ -35,14 +35,14 @@ public class StatsDataEditor : Editor
         int dimension = 40;
         GUILayout.BeginHorizontal();
             foreach(Stat stat in script.stats){
-                if(stat.GetIcon(true) == null)
+                if(stat.icon == null)
                     continue;
                     
                 if(counter % width == 0){
                     GUILayout.EndHorizontal();
                     GUILayout.BeginHorizontal();
                 } 
-                var texture = AssetPreview.GetAssetPreview(stat.GetIcon(true));
+                var texture = AssetPreview.GetAssetPreview(stat.icon);
                 GUILayout.Label(texture, GUILayout.Width(dimension), GUILayout.Height(dimension));
                 counter++;
             }

@@ -2,36 +2,61 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class ValueMod{
+[System.Serializable]
+public class ValueMod
+{
+    public static string Format(float value, Type type, bool overrideFlatToPercent = false, bool hideSign = false){
+        if(overrideFlatToPercent && type == Type.Flat)
+            type = Type.Percent;
+        switch(type){
+            case Type.Flat:
+                return hideSign ? value.ToString() : Util.ExposeSign(value);
+            case Type.Percent:
+                return hideSign ? Util.FormatPercent(value) : $"{Util.ExposeSign(value*100)}%";
+            case Type.Mult:
+                return hideSign ? value.ToString() : $"X{value}";
+            default:
+                return value.ToString();
+        } 
+    }
+
     public enum Type{
         Flat,
         Percent,
         Mult,
     }
 
-    public string id;
+    [HideInInspector] public RID id;
     public float value;
     public Type type;
 
-    public ValueMod(string id, float value, Type type){
+    public string Format(bool overrideFlatToPercent = false, bool hideSign = false)
+        => Format(value, type, overrideFlatToPercent, hideSign);
+
+    public ValueMod(RID id, float value, Type type){
         this.id = id;
         this.value = value;
         this.type = type;
     }
 }
     
-[Serializable]
+[System.Serializable]
 public class CompositeValue
 {
     public CompositeValue(){
         CalculateValue();
     }
 
+    public CompositeValue(float value){
+        baseValue = value;
+    }
+
     public static implicit operator float(CompositeValue cv) =>
         cv != null ? cv.value : 0f;
+    public static implicit operator string(CompositeValue cv) =>
+        cv != null ? cv.value.ToString() : "";
 
-    private float _baseValue;
+    [SerializeField] private float _baseValue;
     public float baseValue{
         get => _baseValue;
         set{
@@ -39,6 +64,12 @@ public class CompositeValue
             CalculateValue();
         }
     }
+
+    public bool useMin = false;
+    public float min = 0f;
+    public bool useMax = false;
+    public float max = 1f;
+
     [SerializeField] private float value;
     [SerializeField] private List<ValueMod> mods = new();
 
@@ -65,6 +96,10 @@ public class CompositeValue
             }
 
         value = (baseValue + flatValue)*(1f + percentValue)*multValue;
+        if(useMin)
+            value = Mathf.Max(value, min);
+        if(useMax)
+            value = Mathf.Min(value, max);
         OnValueChange?.Invoke(value);
     }
 
@@ -83,11 +118,11 @@ public class CompositeValue
         CalculateValue();
     }
 
-    public void RemoveMod(string id){
+    public void RemoveMod(RID id){
         for(int i = 0; i < mods.Count; i++)
             if(mods[i].id == id){
                 mods.RemoveAt(i);
-                return;
+                break;
             }
 
         CalculateValue();

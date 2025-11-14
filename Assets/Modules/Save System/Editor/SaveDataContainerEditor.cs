@@ -20,12 +20,14 @@ public class SaveSOEditor : Editor {
             }
             if(GUILayout.Button("Reset", GUILayout.Height(height))){
                 save.data = new SaveData();
+                save.Save();
             }
             if(GUILayout.Button("Load", GUILayout.Height(height))){
                 save.Load();
             }
             if(GUILayout.Button("Delete", GUILayout.Height(height))){
                 save.Delete();
+                save.data = new SaveData();
             }
 
         EditorGUILayout.EndHorizontal();

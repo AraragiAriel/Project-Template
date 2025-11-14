@@ -27,7 +27,7 @@ public class AudioVolumeSetter : MonoBehaviour
         SetSettingsMult();
     }
 
-    public void SetMult(int id, float value){
+    public void SetMult(RID id, float value){
         bool found = false;
         foreach(AudioMult mult in mults)
             if(mult.id == id){
@@ -41,7 +41,7 @@ public class AudioVolumeSetter : MonoBehaviour
         SetVolume();
     }
 
-    public void RemoveMult(int id){
+    public void RemoveMult(RID id){
         foreach(AudioMult mult in mults)
             if(mult.id == id){
                 mults.Remove(mult);
@@ -63,10 +63,10 @@ public class AudioVolumeSetter : MonoBehaviour
 }
 
 public class AudioMult{
-    public int id;
+    public RID id;
     public float value;
 
-    public AudioMult(int id, float value){
+    public AudioMult(RID id, float value){
         this.id = id;
         this.value = value;
     }

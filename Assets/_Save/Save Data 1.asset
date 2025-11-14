@@ -20,10 +20,8 @@ MonoBehaviour:
         amount: 0
       - type: 2
         amount: 0
-      - type: 3
-        amount: 0
-      - type: 4
-        amount: 0
       unlocked: 
     achievementSave:
       completed: []
+    upgradeSave:
+      upgrades: []

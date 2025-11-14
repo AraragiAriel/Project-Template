@@ -300,7 +300,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1001 &4969803356889806886
@@ -313,7 +313,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181682135417817650, guid: 4d5709a31e78a404ab37351cee1af0fb, type: 3}
       propertyPath: m_Name
-      value: Confirmation Box Variant
+      value: Confirmation Box
       objectReference: {fileID: 0}
     - target: {fileID: 1681342815744631599, guid: 4d5709a31e78a404ab37351cee1af0fb, type: 3}
       propertyPath: m_Pivot.x
@@ -523,6 +523,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6424362405706914709}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Confirm
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ConfirmationBox, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4029825659386442318, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
       propertyPath: m_Name
       value: No Button
@@ -530,13 +558,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4029825659386442318, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6987079270585261164}
   m_SourcePrefab: {fileID: 100100000, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
 --- !u!224 &4832320244583101346 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3144357505162857356, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
   m_PrefabInstance: {fileID: 7542642985551083566}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6863495466716662368 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4029825659386442318, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+  m_PrefabInstance: {fileID: 7542642985551083566}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6987079270585261164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6863495466716662368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f4824e34d82d744876f36b51f47588, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: d8a00e5f6fe636545aa573cd3f96dcad, type: 2}
 --- !u!1001 &8903362948271745821
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -625,6 +674,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6424362405706914709}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Confirm
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ConfirmationBox, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005710285663819877, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      propertyPath: onLeftClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4029825659386442318, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
       propertyPath: m_Name
       value: Yes Button
@@ -632,8 +721,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4029825659386442318, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1536910057944553849}
   m_SourcePrefab: {fileID: 100100000, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+--- !u!1 &5504463604350916947 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4029825659386442318, guid: 746f9b831e6d9c24993303b84035f012, type: 3}
+  m_PrefabInstance: {fileID: 8903362948271745821}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1536910057944553849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5504463604350916947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f4824e34d82d744876f36b51f47588, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 5fed316a66c520c418b40835ee0b44f5, type: 2}
 --- !u!224 &5777019979057356945 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3144357505162857356, guid: 746f9b831e6d9c24993303b84035f012, type: 3}

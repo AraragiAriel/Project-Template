@@ -9,7 +9,13 @@ public class ButtonEvents : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     [Space]
     
-    public UnityEvent onSelect, onDeselect, onClick;
+    public UnityEvent onSelect;
+    public UnityEvent onDeselect;
+    public UnityEvent onLeftClick;
+    public UnityEvent onRightClick;
+    public UnityEvent onMiddleClick;
+    public UnityEvent onAnyClick;
+
     private Button button;
 
     private void Awake(){
@@ -32,8 +38,20 @@ public class ButtonEvents : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerClick(PointerEventData eventData){
         if(!button.interactable) return;
+
+        switch(eventData.button){
+            case PointerEventData.InputButton.Left:
+                onLeftClick?.Invoke();
+                break;
+            case PointerEventData.InputButton.Right:
+                onRightClick?.Invoke();
+                break;
+            case PointerEventData.InputButton.Middle:
+                onMiddleClick?.Invoke();
+                break;
+        }
+        onAnyClick?.Invoke();
         
-        onClick?.Invoke();
         AudioManager.PlayClip(onClickClip);
     }
 }

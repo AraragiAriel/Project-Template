@@ -4,6 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "currency Data", menuName = "ScriptableObject/Others/Currencies Data")]
 public class CurrenciesData : ScriptableObject
 {
+    [Resource(ResourceAttribute.Tag.Data)] public CurrenciesData currenciesData;
+
     public List<CurrencyData> list;
 
     public CurrencyData Get(Currency c){

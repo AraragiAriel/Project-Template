@@ -5,6 +5,8 @@ using System.Collections;
 
 public class Popup : MonoBehaviour
 {
+    [Resource(ResourceAttribute.Tag.Prefab)] public Popup popup;
+
     public class Parameters{
         public Vector2 pos = Vector2.zero;
         public string s = "";

@@ -9,7 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d078e3b36bf8ec4a9027226e85a36b7, type: 3}
-  m_Name: Stats Offset Data
+  m_Script: {fileID: 11500000, guid: c7c0d106ee98410469bfd3e9dd1f4ca6, type: 3}
+  m_Name: Yes
   m_EditorClassIdentifier: 
-  offsets: []
+  localizedString:
+    strings:
+    - language: 0
+      text: Yes
+    - language: 1
+      text: Sim

@@ -25,11 +25,11 @@ public class SaveMenu : MonoBehaviour
     }
 
     public void Delete(){
-        ConfirmationBox.OpenBox(new ConfirmationBoxParameters(Res.String("Delete Save Box"), ConfirmDelete));
+        ConfirmationBox.OpenBox(new ConfirmationBox.Parameters(Res.data.localizationData.Get("Delete Save Box"), ConfirmDelete));
     }
 
     public void ConfirmDelete(){
-        ConfirmationBox.OpenBox(new ConfirmationBoxParameters(Res.String("Really Delete Save Box"), ReallyConfirm));
+        ConfirmationBox.OpenBox(new ConfirmationBox.Parameters(Res.data.localizationData.Get("Really Delete Save Box"), ReallyConfirm));
     }
 
     public void ReallyConfirm(){

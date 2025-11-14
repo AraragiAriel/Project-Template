@@ -36,7 +36,7 @@ public class UpgradeDataEditor : Editor
         if(data.stat != null){
             GUILayout.Space(8);
 
-            EditorGUILayout.LabelField("Stat base value", data.stat.baseValue.ToString());
+            EditorGUILayout.LabelField("Stat base value", data.stat.value.baseValue.ToString());
             EditorGUILayout.LabelField("Stat added value", (data.maxLevel*data.valuePerLevel).ToString());
 
             GUILayout.Space(8);

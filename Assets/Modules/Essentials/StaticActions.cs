@@ -31,22 +31,22 @@ public class Variation{
     public bool setup = false;
     
     public float change => current - previous;    
-    public VariationType type => GetType(change);
+    public Type type => GetType(change);
     public AppearanceType apperance => GetAppearance(current);
 
     public float triedChange => tried - previous;  
-    public VariationType triedType => GetType(triedChange);
+    public Type triedType => GetType(triedChange);
     public AppearanceType triedApperance => GetAppearance(tried);
 
     public float percentage => current/max;
-    public bool damaged => !setup && triedType == VariationType.Decrease;
+    public bool damaged => !setup && triedType == Type.Decrease;
 
-    private VariationType GetType(float change){
+    private Type GetType(float change){
         if(setup || Mathf.Approximately(change, 0f))
-            return VariationType.None;
+            return Type.None;
         if(change > 0f)
-            return VariationType.Increase;
-        return VariationType.Decrease;
+            return Type.Increase;
+        return Type.Decrease;
     }
 
     private AppearanceType GetAppearance(float current){
@@ -66,7 +66,7 @@ public class Variation{
         return AppearanceType.None;
     }
 
-    public enum VariationType{
+    public enum Type{
         None,
         Increase,
         Decrease,

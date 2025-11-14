@@ -11,6 +11,8 @@ public enum GameLanguage{
 [CreateAssetMenu(fileName = "GameSettingsData", menuName = "ScriptableObject/Others/GameSettingsData")]
 public class GameSettingsData : ScriptableObject
 {
+    [Resource(ResourceAttribute.Tag.Options)] public GameSettingsData gameSettings;
+
     #if UNITY_EDITOR
     public bool toApply = false;
     #endif

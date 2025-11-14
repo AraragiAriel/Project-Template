@@ -14,10 +14,10 @@ public static class Initializer
     private static void Initialize(){
         Res.Initialize();
         GameStateManager.Initialize();
-        RID.Initialize();
         DOTween.SetTweensCapacity(1250, 125);
 
         // POPULATE DICTS
-        Res.data.uids.Populate();
+        Res.data.uidsData.Populate();
+        Res.data.localizationData.Populate();
     }
 }

@@ -5,11 +5,9 @@ using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Upgrade", menuName = "ScriptableObject/Upgrade Data")]
 [System.Serializable]
-public class UpgradeData : ScriptableObject
+public class UpgradeData : UIDAsset
 {
-    public UID uid;
-
-    [Space]
+    public RID rid = new();
 
     [Header("Display")]
     public Sprite icon;
@@ -53,17 +51,11 @@ public class UpgradeData : ScriptableObject
     
     public CurrencyAmount cost => Cost(level);
     public CurrencyAmount Cost(int level){
-        float multiplier = 1f;
-        try{
-            Stat discount = Res.data.statsData.GetStat("33a7850f010b6f74fa84ca1ce3e94954");
-            multiplier = 1f - discount;
-        } catch {}
         if(level >= maxLevel)
             return new CurrencyAmount(Currency.Null, 0);
         else{
             CurrencyAmount c = initialCost;
             c.amount += costIncrease*level;
-            c.amount *= multiplier;
             if(!Mathf.Approximately(c.amount, Mathf.Round(c.amount)))
                 c.amount = Mathf.Floor(c.amount);
             return c;

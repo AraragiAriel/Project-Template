@@ -58,7 +58,7 @@ public class StateMachine : MonoBehaviour
 
         currentState?.Exit();
         #if UNITY_EDITOR
-        if(Res.editor.debugStateMachine && debug)
+        if(Res.data.editorPreferences.debugStateMachine && debug)
             if(currentState != null)
                 Util.Debug(currentState.ToString());
         #endif

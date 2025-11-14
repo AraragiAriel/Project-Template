@@ -94,7 +94,7 @@ public class Upgrade : MonoBehaviour
             return;
 
         if(data.stat != null)
-            data.stat.SetModifier(new ValueMod(data.uid, data.valuePerLevel*data.level, data.valueModType));
+            data.stat.SetModifier(new ValueMod(data.rid, data.valuePerLevel*data.level, data.valueModType));
         OnSetEffect?.Invoke(data.level);
     }
 }

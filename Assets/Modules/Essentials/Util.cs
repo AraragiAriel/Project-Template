@@ -5,6 +5,8 @@ using System.Globalization;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Reflection;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -43,45 +45,6 @@ public static class Util
             #endif
         }
     }
-
-    public static string Concat(float value, bool allowDecimal, int digits = 3, bool round = true){
-        value = SetDigits(value, digits, round);
-        string format = "0.##";
-
-        string[] suffixes = {"", "K", "M", "B", "T"};
-        int suffixId = 0;
-
-        float abs = Mathf.Abs(value);
-        while(abs >= 1000f && suffixId < suffixes.Length - 1){
-            abs /= 1000;
-            suffixId++;
-        }
-
-        if(suffixId == 0 && !allowDecimal){
-            if(!round)
-                abs = Mathf.Floor(abs);
-            format = "F0";
-        }
-
-
-        float result = Mathf.Sign(value)*abs;
-        return result.ToString(format, CultureInfo.InvariantCulture) + suffixes[suffixId];
-    }
-
-    public static float SetDigits(float value, int digits, bool round){
-        if(value == 0)
-            return 0f;
-
-        int power = Mathf.FloorToInt(Mathf.Log10(Mathf.Abs(value)));
-        float scale = Mathf.Pow(10, digits - 1 - power);
-        float truncated;
-        if(round)
-            truncated = Mathf.Round(value*scale)/scale;
-        else
-            truncated = Mathf.Floor(value*scale)/scale;
-
-        return truncated;
-    }
     
     public static Vector2 RotateVector2(Vector2 original, float angle){
         float rad = Mathf.Deg2Rad*angle;
@@ -119,6 +82,56 @@ public static class Util
     }
 
     public static List<T> EnumList<T>() where T : System.Enum => System.Enum.GetValues(typeof(T)).Cast<T>().ToList();
+
+    #region FORMATTING
+
+    public static string Concat(float value, bool allowDecimal = true, int digits = 3, bool round = true){
+        value = SetDigits(value, digits, round);
+        string format = "0.##";
+
+        string[] suffixes = {"", "K", "M", "B", "T"};
+        int suffixId = 0;
+
+        float abs = Mathf.Abs(value);
+        while(abs >= 1000f && suffixId < suffixes.Length - 1){
+            abs /= 1000;
+            suffixId++;
+        }
+
+        if(suffixId == 0 && !allowDecimal){
+            if(!round)
+                abs = Mathf.Floor(abs);
+            format = "F0";
+        }
+
+
+        float result = Mathf.Sign(value)*abs;
+        return result.ToString(format, CultureInfo.InvariantCulture) + suffixes[suffixId];
+    }
+
+    public static float SetDigits(float value, int digits, bool round){
+        if(value == 0)
+            return 0f;
+
+        int power = Mathf.FloorToInt(Mathf.Log10(Mathf.Abs(value)));
+        float scale = Mathf.Pow(10, digits - 1 - power);
+        float truncated;
+        if(round)
+            truncated = Mathf.Round(value*scale)/scale;
+        else
+            truncated = Mathf.Floor(value*scale)/scale;
+
+        return truncated;
+    }
+
+    public static string FormatPercent(float value) => $"{value*100}%";
+
+    public static string ExposeSign(float value)
+        => value > 0f || Mathf.Approximately(value, 0f) ? 
+            $"+{value}" :
+            $"-{Mathf.Abs(value)}";
+
+    #endregion
 
     #region RANDOM
 
@@ -168,6 +181,7 @@ public static class Util
     }
 
     public static T Rand<T>(this IList<T> list){
+        if(list.Count == 0) return default(T);
         return list[UnityEngine.Random.Range(0, list.Count)];
     }
 
@@ -186,8 +200,11 @@ public static class Util
             list.RemoveRand();
     }
 
-    public static T Pop<T>(this IList<T> list){
-        T t = list.Rand();
+    public static T PopFirst<T>(this IList<T> list) => list.Pop(0);
+    public static T PopLast<T>(this IList<T> list) => list.Pop(list.Count - 1);
+    public static T PopRand<T>(this IList<T> list) => list.Pop(Random.Range(0, list.Count - 1));
+    public static T Pop<T>(this IList<T> list, int n){
+        T t = list[n];
         list.Remove(t);
         return t;
     }
@@ -204,14 +221,22 @@ public static class Util
         sr.color = aux;
     }
     
-    public static IEnumerable<int> To(this int min, int max) {
-        for(int i = min; i <= max; i++)
-            yield return i;
+    public static IEnumerable<int> To(this int from, int to){
+        if(from < to)
+            for(int i = from; i <= to; i++)
+                yield return i;
+        else
+            for(int i = from; i >= to; i--)
+                yield return i;
     }
     
     public static bool Even(this int i) => i % 2 == 0;
-    public static bool Odd (this int i) => i % 2 == 1;
-    public static int Next (this int i, int max) => i + 1 > max ? 0 : i +1;
+    public static bool Odd(this int i) => i % 2 == 1;
+    public static int Next(this int i, int max) => i + 1 > max ? 0 : i +1;
+
+    public static string ToPercent(this float f){
+        return (f*100).ToString() + "%";
+    }
 
     public static void SetGradient(this Gradient gradient, Color color1, Color color2) =>
         gradient.SetGradient(color1, color2, color1.a, color2.a);
@@ -245,6 +270,15 @@ public static class Util
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
         anim.Play(stateInfo.fullPathHash, 0, Random.Range(0f, 1f));
     }
+
+    public static string Localize(this System.Enum value){
+        var member = value.GetType().GetMember(value.ToString())[0];
+        var attr = member.GetCustomAttribute<LocalizeAttribute>();
+        return attr != null ? Res.data.localizationData.Get(attr.key) : value.ToString();
+    }
+
+    public static string ColorWrap(this string s, Color color)
+        => $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{s}</color>";
 
     #endregion
 

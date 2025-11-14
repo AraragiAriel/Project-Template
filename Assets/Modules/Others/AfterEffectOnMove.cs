@@ -35,6 +35,6 @@ public class AfterEffectOnMove : MonoBehaviour
     }
 
     private void Emit(){
-        AfterEffect.Emit(new AfterEffectParameters(sr, sprite, alpha));
+        AfterEffect.Emit(new AfterEffect.Parameters(sr, sprite, alpha));
     }
 }

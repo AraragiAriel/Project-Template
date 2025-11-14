@@ -9,21 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 587d7e73bb59651458febf1a7a0e5570, type: 3}
+  m_Script: {fileID: 11500000, guid: d1667bbd899532c4dbfb958696493b54, type: 3}
   m_Name: Resources Data
   m_EditorClassIdentifier: 
-  demo: 0
-  currentSave: {fileID: 11400000, guid: 318fff756777d8049922bbe2c5cf6bf6, type: 2}
-  gameSettings: {fileID: 11400000, guid: f272dc416705d644a9ef4b517babec5f, type: 2}
+  colorTags: {fileID: 11400000, guid: ddc5666a667798f4cb3fbf3767f71387, type: 2}
   scenePersistentData: {fileID: 11400000, guid: 4259220647fc1be4db31ea9b7fde8622, type: 2}
+  uidsData: {fileID: 11400000, guid: 4569adfb2f8b0d34e8c6d0dba117fabe, type: 2}
+  localizationData: {fileID: 11400000, guid: f1b709e06a3fdaa488e61d34d9eb0a26, type: 2}
   currenciesData: {fileID: 11400000, guid: c074f94c08e6df84c976364f35efd65b, type: 2}
+  currentSave: {fileID: 11400000, guid: 318fff756777d8049922bbe2c5cf6bf6, type: 2}
   statsData: {fileID: 11400000, guid: 9e5855768a381aa4aa993de588e9fb9b, type: 2}
   upgradesData: {fileID: 11400000, guid: d48f48d40ed6dbc4b891f4d6f1f8d3f4, type: 2}
-  uids: {fileID: 11400000, guid: 4569adfb2f8b0d34e8c6d0dba117fabe, type: 2}
+  gameSettings: {fileID: 11400000, guid: f272dc416705d644a9ef4b517babec5f, type: 2}
   audioSourcePrefab: {fileID: 209194980401800198, guid: 9d187162b646f6f4d9da2d56ecb0a5ec, type: 3}
-  spriteShadow: {fileID: 5219996092714982801, guid: 4e2ce135b72d22247846db9f3c4098ab, type: 3}
   afterEffect: {fileID: 1284009972555943294, guid: a4d4c0ade74b4124093186cf28e19094, type: 3}
   popup: {fileID: 3493427723174464299, guid: e1ed4ae735696684fa6acc87d2496c59, type: 3}
+  spriteShadow: {fileID: 5219996092714982801, guid: 4e2ce135b72d22247846db9f3c4098ab, type: 3}
   confirmationBox: {fileID: 6424362405706914709, guid: 54a8c82de6af0c54dbf96343ba52ea30, type: 3}
   editorPreferences: {fileID: 11400000, guid: b2e8ed4119072ff41842eba52549a6d6, type: 2}
   offsetData: {fileID: 11400000, guid: 11ffc6b4b1f2c3a4e89a69ba4fefcaec, type: 2}

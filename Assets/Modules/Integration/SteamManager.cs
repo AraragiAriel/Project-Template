@@ -11,7 +11,7 @@ public class SteamManager : MonoBehaviour
     private void Awake(){
 
         #if UNITY_EDITOR
-        if(Res.editor.disableSteam){
+        if(Res.data.editorPreferences.disableSteam){
             Destroy(gameObject);
             return;
         }

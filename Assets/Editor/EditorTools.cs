@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public static class EditorTools
 {
+    public static void GlobalSet(){
+        SetStats();
+        SetUIDs();
+        SetLocalization();
+    }
+
     public static void SetStats(){
         var data = Res.data.statsData;
         data.stats.Clear();
@@ -26,7 +32,7 @@ public static class EditorTools
     }
 
     public static void SetUIDs(){
-        var data = Res.data.uids;
+        var data = Res.data.uidsData;
         data.uids.Clear();
 
         string path = "Assets";
@@ -50,6 +56,29 @@ public static class EditorTools
             }
 
             data.uids.Add(uidAsset);
+        }
+
+        EditorUtility.SetDirty(data);
+    }
+
+    public static void SetLocalization(){
+        var data = Res.data.localizationData;
+        data.localizers.Clear();
+
+        string path = "Assets";
+        string filter = "t:ScriptableObject";
+
+        string[] assetGuids = AssetDatabase.FindAssets(filter, new[] {path});
+        var localizers = assetGuids
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Select(AssetDatabase.LoadAssetAtPath<ScriptableObject>)
+            .Where(asset => asset != null)
+            .ToList();
+
+        foreach(var asset in localizers){
+            if(asset is ILocalizer){
+                data.localizers.Add(asset);
+            }
         }
 
         EditorUtility.SetDirty(data);

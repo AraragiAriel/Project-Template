@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class AudioSourceManager : MonoBehaviour
 {
+    [Resource(ResourceAttribute.Tag.Prefab)] public AudioSourceManager audioSourcePrefab;
+
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioVolumeSetter volumeSetter;
     [Range(0f, 1f)]
     [SerializeField] private float spatialBlend;
 
-    private RID id;
+    private RID id = new();
 
     public bool isPlaying{get{return audioSource.isPlaying;}}
 

@@ -4,6 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UIDs", menuName = "ScriptableObject/Others/UIDs")]
 public class UIDs : ScriptableObject
 {
+    [Resource(ResourceAttribute.Tag.Data)] public UIDs uidsData;
+
     public List<UIDAsset> uids;
     private Dictionary<string, UIDAsset> dict = new();
 

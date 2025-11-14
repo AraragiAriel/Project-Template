@@ -1,9 +1,9 @@
 using UnityEngine;
 using TMPro;
 
-public class LocalizedStringSetter : MonoBehaviour
+public class Localizer : MonoBehaviour
 {
-    [SerializeField] private LocalizedStringData s;
+    [SerializeField] private LocalizedStringData data;
 
     private void OnEnable(){
         StaticActions.OnGameSettingsChange += GameSettingsChange;
@@ -16,19 +16,17 @@ public class LocalizedStringSetter : MonoBehaviour
     private void Start(){
         Set();
     }
+    
+    private void GameSettingsChange() => Set();
 
     private void Set(){
-        if(s == null)
+        if(data == null)
             return;
 
         TextMeshProUGUI tmp = GetComponent<TextMeshProUGUI>();
         if(tmp == null)
             tmp = GetComponentInChildren<TextMeshProUGUI>();
         if(tmp != null)
-            tmp.text = s;        
-    }
-
-    private void GameSettingsChange(){
-        Set();
+            tmp.text = data;        
     }
 }

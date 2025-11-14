@@ -31,8 +31,7 @@ public class EditorPreferencesDataEditor : Editor
         buttonStyle.fontStyle = FontStyle.Bold;
         buttonStyle.fontSize = 16;
         if(GUILayout.Button("GLOBAL SET", buttonStyle, GUILayout.Height(32))){
-            EditorTools.SetStats();
-            EditorTools.SetUIDs();
+            EditorTools.GlobalSet();
         }
     }
 }

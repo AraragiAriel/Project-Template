@@ -5,6 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class UpgradesData : ScriptableObject
 {
+    [Resource(ResourceAttribute.Tag.Data)] public UpgradesData upgradesData;
+
     public List<UpgradeData> upgrades = new();
 
     public int uniqueCount => upgrades.Count;
