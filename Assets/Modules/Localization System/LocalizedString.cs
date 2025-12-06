@@ -17,8 +17,8 @@ public class LocalizedString{
                 }
 
             if(!string.IsNullOrEmpty(toReturn))
-                return Res.data.colorTags.Parse(toReturn);
-            return Res.data.colorTags.Parse(strings[0].text);
+                return toReturn;
+            return strings[0].text;
         } catch{
             return "";
         }

@@ -8,14 +8,14 @@ public class AudioManager : MonoBehaviour
     private const int initialAmount = 20;
     private static AudioManager instance;
 
-    public static void PlayClip(ClipData clipData, float timer = 0f){
+    public static void Play(ClipData clipData, float timer = 0f){
         if(!Check(clipData))
             return;
 
         instance.GetSource().Set2D(clipData, timer);
     }
       
-    public static void PlayClip(ClipData clipData, Vector2 pos, float timer = 0f){
+    public static void Play(ClipData clipData, Vector2 pos, float timer = 0f){
         if(!Check(clipData))
             return;
 

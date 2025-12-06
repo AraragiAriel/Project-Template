@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181682135417817650, guid: 4d5709a31e78a404ab37351cee1af0fb, type: 3}
       propertyPath: m_Name
-      value: World Space Canvas Variant
+      value: World Space Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 427289507570472514, guid: 4d5709a31e78a404ab37351cee1af0fb, type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -50,15 +50,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1681342815744631599, guid: 4d5709a31e78a404ab37351cee1af0fb, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.0625
       objectReference: {fileID: 0}
     - target: {fileID: 1681342815744631599, guid: 4d5709a31e78a404ab37351cee1af0fb, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.0625
       objectReference: {fileID: 0}
     - target: {fileID: 1681342815744631599, guid: 4d5709a31e78a404ab37351cee1af0fb, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.0625
       objectReference: {fileID: 0}
     - target: {fileID: 1681342815744631599, guid: 4d5709a31e78a404ab37351cee1af0fb, type: 3}
       propertyPath: m_LocalPosition.x

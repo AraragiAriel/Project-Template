@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface ILocalizer
 {
-    public LocalizedString GetLocalizer();
+    public string Localize(string field);
 }

@@ -26,14 +26,14 @@ public class ButtonEvents : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if(!button.interactable) return;
 
         onSelect?.Invoke();
-        AudioManager.PlayClip(onSelectClip);
+        AudioManager.Play(onSelectClip);
     }
 
     public void OnPointerExit(PointerEventData eventData){
         if(!button.interactable) return;
         
         onDeselect?.Invoke();
-        AudioManager.PlayClip(onDeselectClip);
+        AudioManager.Play(onDeselectClip);
     }
 
     public void OnPointerClick(PointerEventData eventData){
@@ -52,6 +52,6 @@ public class ButtonEvents : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
         onAnyClick?.Invoke();
         
-        AudioManager.PlayClip(onClickClip);
+        AudioManager.Play(onClickClip);
     }
 }

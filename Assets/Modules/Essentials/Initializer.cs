@@ -19,5 +19,6 @@ public static class Initializer
         // POPULATE DICTS
         Res.data.uidsData.Populate();
         Res.data.localizationData.Populate();
+        Res.data.colorTags.Populate();
     }
 }

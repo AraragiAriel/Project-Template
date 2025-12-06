@@ -54,7 +54,8 @@ public class AudioVolumeSetter : MonoBehaviour
     private void SetVolume(){
         float volume = 1f;
         foreach(AudioMult mult in mults)
-            audioSource.volume = volume;
+            volume *= mult.value;
+        audioSource.volume = volume;
     }
 
     private void SetSettingsMult(){

@@ -3,7 +3,7 @@ using System.IO;
 using Odin.OdinSerializer;
 
 [System.Serializable]
-[CreateAssetMenu(fileName = "SaveData ", menuName = "ScriptableObject/Others/SaveData")]
+// [CreateAssetMenu(fileName = "SaveData ", menuName = "ScriptableObject/Others/SaveData")]
 public class SaveDataContainer : ScriptableObject
 {
     public string saveName;

@@ -35,9 +35,9 @@ public class Upgrade : MonoBehaviour
             if(value == _subbedToOnCurrency) return;
 
             if(value)
-                StaticActions.OnCurrencyChange += OnCurrencyChange;
+                StaticActions.OnEconUpdate += EconUpdate;
             else
-                StaticActions.OnCurrencyChange -= OnCurrencyChange;
+                StaticActions.OnEconUpdate -= EconUpdate;
             _subbedToOnCurrency = value;
         }
     }
@@ -67,7 +67,7 @@ public class Upgrade : MonoBehaviour
         if(data == this.data)
             SetEffect();
     }
-    private void OnCurrencyChange(Currency c, Variation v) => SetState();
+    private void EconUpdate() => SetState();
 
     private void SetState(){
         if(data.maxedOut){
@@ -78,7 +78,7 @@ public class Upgrade : MonoBehaviour
             state = UpgradeState.Hidden;
             subbedToOnBuy = true;
             subbedToOnCurrency = false;
-        } else if(CurrencyManager.HasEnoughCurrency(data.cost)){
+        } else if(CurrencyManager.instance.HasEnoughCurrency(data.cost)){
             state = UpgradeState.Available;
             subbedToOnBuy = true;
             subbedToOnCurrency = true;

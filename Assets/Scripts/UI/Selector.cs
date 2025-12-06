@@ -71,8 +71,9 @@ public class Selector : MonoBehaviour
             return;
         }
 
-        tmp.text = useLs ? 
-            localizedStrings[currentId] :
-            strings[currentId];
+        if(useLs)
+            tmp.Set(localizedStrings[currentId]);
+        else
+            tmp.Set(strings[currentId]);
     }
 }

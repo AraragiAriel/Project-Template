@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Stats", menuName = "ScriptableObject/Others/Stats Data")]
+// [CreateAssetMenu(fileName = "Stats", menuName = "ScriptableObject/Others/Stats Data")]
 [System.Serializable]
 public class StatsData : ScriptableObject
 {

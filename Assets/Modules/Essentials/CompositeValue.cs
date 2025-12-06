@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 [System.Serializable]
@@ -8,13 +9,14 @@ public class ValueMod
     public static string Format(float value, Type type, bool overrideFlatToPercent = false, bool hideSign = false){
         if(overrideFlatToPercent && type == Type.Flat)
             type = Type.Percent;
+        value = Util.SetDigits(value, 3);
         switch(type){
             case Type.Flat:
-                return hideSign ? value.ToString() : Util.ExposeSign(value);
+                return hideSign ? value.ToString(CultureInfo.InvariantCulture) : Util.ExposeSign(value);
             case Type.Percent:
                 return hideSign ? Util.FormatPercent(value) : $"{Util.ExposeSign(value*100)}%";
             case Type.Mult:
-                return hideSign ? value.ToString() : $"X{value}";
+                return hideSign ? value.ToString(CultureInfo.InvariantCulture) : $"X{value.ToString(CultureInfo.InvariantCulture)}";
             default:
                 return value.ToString();
         } 
@@ -65,10 +67,12 @@ public class CompositeValue
         }
     }
 
+    [Space(16)]
     public bool useMin = false;
     public float min = 0f;
     public bool useMax = false;
     public float max = 1f;
+    [Space(16)]
 
     [SerializeField] private float value;
     [SerializeField] private List<ValueMod> mods = new();

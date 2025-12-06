@@ -5,13 +5,36 @@ using UnityEngine.UI;
 
 public static class EditorTools
 {
-    public static void GlobalSet(){
+    #region FOLDERS
+
+    [MenuItem("Tools/AraragiAriel/Folders/Project Folder")]
+    private static void OpenProjectFolder(){
+        Application.OpenURL(StaticData.projectFolder);
+    }
+
+    [MenuItem("Tools/AraragiAriel/Folders/Custom Folder")]
+    private static void OpenCustomFolder(){
+        Application.OpenURL(StaticData.customFolder);
+    }
+
+    [MenuItem("Tools/AraragiAriel/Folders/Persistent Save Path")]
+    private static void OpenPersistentSavePath(){
+        Application.OpenURL(SaveDataContainer.persistentPath);
+    }
+
+    #endregion
+
+    #region SETTERS
+
+    [MenuItem("Tools/AraragiAriel/Global Set")]
+    private static void GlobalSet(){
         SetStats();
         SetUIDs();
         SetLocalization();
+        SetColors();
     }
 
-    public static void SetStats(){
+    private static void SetStats(){
         var data = Res.data.statsData;
         data.stats.Clear();
 
@@ -31,7 +54,7 @@ public static class EditorTools
         EditorUtility.SetDirty(data);
     }
 
-    public static void SetUIDs(){
+    private static void SetUIDs(){
         var data = Res.data.uidsData;
         data.uids.Clear();
 
@@ -61,7 +84,7 @@ public static class EditorTools
         EditorUtility.SetDirty(data);
     }
 
-    public static void SetLocalization(){
+    private static void SetLocalization(){
         var data = Res.data.localizationData;
         data.localizers.Clear();
 
@@ -83,4 +106,30 @@ public static class EditorTools
 
         EditorUtility.SetDirty(data);
     }
+
+    public static void SetColors(){
+        var data = Res.data.colorTags;
+        data.colors.Clear();
+
+        string path = "Assets";
+        string filter = "t:ScriptableObject";
+
+        string[] assetGuids = AssetDatabase.FindAssets(filter, new[] {path});
+        var colors = assetGuids
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Select(AssetDatabase.LoadAssetAtPath<ScriptableObject>)
+            .Where(asset => asset != null)
+            .ToList();
+
+        foreach(var asset in colors){
+            if(asset is IColor){
+                data.colors.Add(asset);
+            }
+        }
+        data.Populate();
+
+        EditorUtility.SetDirty(data);
+    }
+
+    #endregion
 }

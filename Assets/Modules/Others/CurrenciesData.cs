@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "currency Data", menuName = "ScriptableObject/Others/Currencies Data")]
+// [CreateAssetMenu(fileName = "currency Data", menuName = "ScriptableObject/Others/Currencies Data")]
 public class CurrenciesData : ScriptableObject
 {
     [Resource(ResourceAttribute.Tag.Data)] public CurrenciesData currenciesData;

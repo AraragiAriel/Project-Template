@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class ColorFlex
+public class ColorTag
 {
     public string tag;
     [SerializeField] private Color _color = Color.white;
@@ -15,11 +15,11 @@ public class ColorFlex
         }
     }
 
-    public static implicit operator Color(ColorFlex colorFlex) =>
+    public static implicit operator Color(ColorTag colorFlex) =>
         colorFlex != null ? colorFlex.color : Color.white;
 
     public void OnValidate(){
-        if(!(data is IColor))
+        if(data is not IColor)
             data = null;
         if(data != null)
             _color = color;

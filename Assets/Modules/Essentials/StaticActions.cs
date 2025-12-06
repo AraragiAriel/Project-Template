@@ -10,7 +10,7 @@ public static class StaticActions
     public static Action<ControlScheme> OnControlSchemeChange;
 
     // CURRENCY
-    public static Action<Currency, Variation> OnCurrencyChange; // new amount, added amount
+    public static Action<CurrencyAmount, Variation> OnCurrencyChange; // new amount, added amount
     public static Action<UpgradeData> OnBuyUpgrade;
     public static Action OnEconUpdate; // used for money and prices change
 

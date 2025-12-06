@@ -1,0 +1,10 @@
+using UnityEngine;
+using UnityEditor;
+
+[CustomEditor(typeof(PLACEHOLDER), true)]
+public class CUSTOM_EDITOR_TEMPLATE : Editor
+{
+    public override void OnInspectorGUI(){
+        base.OnInspectorGUI();
+    }
+}

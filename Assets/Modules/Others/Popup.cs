@@ -5,29 +5,23 @@ using System.Collections;
 
 public class Popup : MonoBehaviour
 {
-    [Resource(ResourceAttribute.Tag.Prefab)] public Popup popup;
-
     public class Parameters{
         public Vector2 pos = Vector2.zero;
         public string s = "";
         public Color color = Color.white;
-        public float durationMult = 1f;
-        public Vector2 dir = Vector2.up;
+        public float mult = 1f;
+        public float angle = 55f;
+        public float radius = .25f;
+        public bool right = true;
+        
+        private Vector2? _step;
+        public Vector2 step => _step??= radius*mult*Util.AngleToVector(right? angle : 180f - angle);
     }
 
     public static void Pop(Parameters param){
         Popup popup = Instantiate(Res.data.popup, param.pos, Quaternion.identity);
         popup.Set(param);
     }
-
-    // public static void Pop(Vector2 pos, string s, bool crit){
-    //     Pop(pos, s, crit, Res.data.palette.white);
-    // }
-
-    // public static void Pop(Vector2 pos, string s, bool crit, Color color){
-    //     var popup = Instantiate(Res.data.damagePopup, pos, Quaternion.identity);
-    //     popup.Set(s, crit, color);
-    // }
 
     // INSTANCE
 
@@ -38,17 +32,16 @@ public class Popup : MonoBehaviour
     [SerializeField] private float fadeDelay;
     [SerializeField] private int vibrato;
     [SerializeField] private float elasticity;
+    [SerializeField] private float jumpPower;
+    
     private Parameters param;
-    private float durationToUse;
 
     private void Set(Parameters param){
         this.param = param;
-        tmp.text = param.s;
+        tmp.Set(param.s);
         tmp.color = param.color;
-        durationToUse = param.durationMult*duration;
-    }
-
-    private void Start(){
+        duration *= param.mult;
+        
         StartCoroutine(TweenCo());
     }
 
@@ -56,12 +49,13 @@ public class Popup : MonoBehaviour
         Transform t = transform;
         t.position = new Vector2(t.position.x, t.position.y);
 
-        t.DOMove((Vector2)t.position +  param.dir*height, durationToUse).SetEase(moveEase);
-        t.DOPunchScale(Vector3.one*scale, durationToUse, vibrato, elasticity).SetEase(moveEase);
+        t.DOLocalJump(t.localPosition + Vector3.up*param.step.y, jumpPower*param.mult, 1, duration);
+        t.DOMoveX(t.position.x +  param.step.x, duration).SetEase(moveEase);
+        t.DOPunchScale(Vector3.one*scale*param.mult, duration, vibrato, elasticity).SetEase(moveEase);
 
-        yield return new WaitForSeconds(durationToUse*fadeDelay);
+        yield return new WaitForSeconds(duration*fadeDelay);
 
-        tmp.DOFade(0f, durationToUse*(1f - fadeDelay)).SetEase(fadeEase)
+        tmp.DOFade(0f, duration*(1f - fadeDelay)).SetEase(fadeEase)
             .onComplete = () => Destroy(gameObject);
     }
 }

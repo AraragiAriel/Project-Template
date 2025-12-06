@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Reflection;
+using TMPro;
+
 
 
 #if UNITY_EDITOR
@@ -81,11 +83,20 @@ public static class Util
         return toDrop;
     }
 
-    public static List<T> EnumList<T>() where T : System.Enum => System.Enum.GetValues(typeof(T)).Cast<T>().ToList();
+    public static List<T> EnumList<T>() where T : System.Enum{
+        return typeof(T)
+            .GetFields(BindingFlags.Public | BindingFlags.Static)
+            .Where(f => !System.Attribute.IsDefined(f, typeof(EnumSkipAttribute)))
+            .Select(f => (T)f.GetValue(null))
+            .ToList();
+    }
 
     #region FORMATTING
 
     public static string Concat(float value, bool allowDecimal = true, int digits = 3, bool round = true){
+        if(digits < 1)
+            return "0";
+
         value = SetDigits(value, digits, round);
         string format = "0.##";
 
@@ -109,7 +120,7 @@ public static class Util
         return result.ToString(format, CultureInfo.InvariantCulture) + suffixes[suffixId];
     }
 
-    public static float SetDigits(float value, int digits, bool round){
+    public static float SetDigits(float value, int digits, bool round = true){
         if(value == 0)
             return 0f;
 
@@ -124,12 +135,24 @@ public static class Util
         return truncated;
     }
 
-    public static string FormatPercent(float value) => $"{value*100}%";
+    public static string FormatPercent(float value) => $"{SetDigits(value*100, 3).ToString(CultureInfo.InvariantCulture)}%";
 
-    public static string ExposeSign(float value)
-        => value > 0f || Mathf.Approximately(value, 0f) ? 
-            $"+{value}" :
-            $"-{Mathf.Abs(value)}";
+    public static string ExposeSign(float value, bool addSpace = false){
+        string s = "";
+        s += value > 0f || Mathf.Approximately(value, 0f) ? "+" : "-";
+        if(addSpace)
+            s += " ";
+        s += Mathf.Abs(value).ToString(CultureInfo.InvariantCulture);
+        return s;
+    }
+
+    public static string ColorWrap(this string s, Color color)
+        => $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{s}</color>";
+        
+    public static string TagWrap(this string s, string tag){
+        if(string.IsNullOrEmpty(tag)) return s;
+        return $"<{tag}>{s}</{tag}>";
+    }
 
     #endregion
 
@@ -157,11 +180,10 @@ public static class Util
             return 0;
         }
 
-        float mult = 1f/sum;
         float partial = 0f;
-        float rand = Random.Range(0f, 1f);
+        float rand = Random.Range(0f, sum);
         foreach(int i in 0.To(chances.Count - 1)){
-            partial += chances[i]*mult;
+            partial += chances[i];
             if(partial >= rand)
                 return i;
         }
@@ -271,15 +293,6 @@ public static class Util
         anim.Play(stateInfo.fullPathHash, 0, Random.Range(0f, 1f));
     }
 
-    public static string Localize(this System.Enum value){
-        var member = value.GetType().GetMember(value.ToString())[0];
-        var attr = member.GetCustomAttribute<LocalizeAttribute>();
-        return attr != null ? Res.data.localizationData.Get(attr.key) : value.ToString();
-    }
-
-    public static string ColorWrap(this string s, Color color)
-        => $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{s}</color>";
-
     #endregion
 
     #region DATA TYPE
@@ -334,6 +347,12 @@ public static class Util
         public T Draw(){
             int id = DrawWeightedIndex(items.Select(i => i.weight).ToList());
             return items[id].obj;
+        }
+
+        public WeightedList(){}
+
+        public WeightedList(WeightedList<T> list){
+            items = new(list.items);
         }
     }
 

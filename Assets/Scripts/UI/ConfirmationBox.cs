@@ -32,7 +32,7 @@ public class ConfirmationBox : MonoBehaviour
     private bool finished = false;
 
     public void SetBox(Parameters parameters){
-        description.text = parameters.description;
+        description.Set(parameters.description);
         actionIfTrue = parameters.actionIfTrue;
         actionIfFalse = parameters.actionIfFalse;
 

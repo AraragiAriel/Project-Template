@@ -4,11 +4,9 @@ using UnityEngine;
 public class LocalizedStringData : ScriptableObject, ILocalizer
 {
     public LocalizedString localizedString;
-    public LocalizedString GetLocalizer() => localizedString;
 
-    public string Localize(){
-        return localizedString.Localize();
-    }
+    public string Localize(string field) => Localize();
+    public string Localize() => localizedString.Localize();
 
     public static implicit operator string(LocalizedStringData data) =>
         data != null ? data.Localize() : "";

@@ -1,11 +1,11 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Color Data", menuName = "ScriptableObject/Others/ColorData")]
+[CreateAssetMenu(fileName = "Color Data", menuName = "ScriptableObject/ColorData")]
 public class ColorData : ScriptableObject, IColor
 {
-    public Color color = Color.white;
+    public ColorTag color;
 
-    public Color GetColor() => color;
+    public ColorTag GetColor() => color;
 
     public static implicit operator Color(ColorData colorData) =>
         colorData != null ? colorData.color : Color.white;

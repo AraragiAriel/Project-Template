@@ -15,13 +15,13 @@ public class SceneChangeAnimDefault : SceneChangeAnim
         holder.SetActive(true);
         bg.anchoredPosition = new Vector2(-xPos, 0f);
         bg.DOLocalMoveX(0f, duration, true).SetEase(easeIn);
-        AudioManager.PlayClip(clipIn);
+        AudioManager.Play(clipIn);
         yield return new WaitForSeconds(duration);        
     }
 
     public override IEnumerator FadeOut(){
         bg.DOLocalMoveX(xPos, duration, true).SetEase(easeOut);
-        AudioManager.PlayClip(clipOut);
+        AudioManager.Play(clipOut);
         yield return new WaitForSeconds(duration);
         holder.SetActive(false);
     }

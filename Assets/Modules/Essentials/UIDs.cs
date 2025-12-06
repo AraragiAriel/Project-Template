@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "UIDs", menuName = "ScriptableObject/Others/UIDs")]
+// [CreateAssetMenu(fileName = "UIDs", menuName = "ScriptableObject/Others/UIDs")]
 public class UIDs : ScriptableObject
 {
     [Resource(ResourceAttribute.Tag.Data)] public UIDs uidsData;
-
+    
     public List<UIDAsset> uids;
     private Dictionary<string, UIDAsset> dict = new();
 
@@ -23,7 +23,11 @@ public class UIDs : ScriptableObject
     public void Populate(){
         dict.Clear();
         foreach(var asset in uids)
-            dict.Add(asset.uid, asset);
+            try{
+                dict.Add(asset.uid, asset);
+            } catch {
+                Debug.LogWarning($"duplicate UID Asset: {asset.name}");
+            }
     }
 
     private void OnValidate(){

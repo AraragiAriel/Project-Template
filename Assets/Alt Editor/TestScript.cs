@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestScript : MonoBehaviour
 {
-    # if UNITY_EDITOR
+#if UNITY_EDITOR || INCLUDE_DEBUG
 
     public KeyCode key1, key2, key3;
 
@@ -42,5 +42,5 @@ public class TestScript : MonoBehaviour
         }
     }  
 
-    #endif
+#endif
 }

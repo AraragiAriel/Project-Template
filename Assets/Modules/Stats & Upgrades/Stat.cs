@@ -13,12 +13,12 @@ public class Stat : UIDAsset, IColor
     public string statName => _statName.Localize().ColorWrap(color);
     public LocalizedString description;
     public Sprite icon;
-    public Color color;
+    public ColorTag color;
     public bool isPercent = false;
     public bool allowDecimal = true;
     public bool usePercent = false;
 
-    public Color GetColor() => color;
+    public ColorTag GetColor() => color;
 
     public string valueText{
         get{
@@ -48,4 +48,11 @@ public class Stat : UIDAsset, IColor
     }
 
     private void ValueChangeConnect(float value) => OnValueChange?.Invoke(value);
+
+    [System.Serializable]
+    public class Mod{
+        public Stat stat;
+        public float value;
+        public ValueMod.Type type;
+    }
 }

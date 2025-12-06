@@ -39,7 +39,7 @@ public class UpgradeManager : MonoBehaviour
         if(GetState(data) != UpgradeState.Available)
             return false;
 
-        if(!CurrencyManager.SpendCurrency(data.cost))
+        if(!CurrencyManager.instance.SpendCurrency(data.cost))
             return false;
 
         Res.save.upgradeSave.AddLevel(data.uid);

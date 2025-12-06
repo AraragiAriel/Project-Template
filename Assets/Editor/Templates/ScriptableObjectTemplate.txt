@@ -1,0 +1,7 @@
+using System;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "PLACEHOLDER Data", menuName = "ScriptableObject/PLACEHOLDER Data")]
+public class SCRIPTABLE_OBJECT_TEMPLATE : ScriptableObject
+{
+}

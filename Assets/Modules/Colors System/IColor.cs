@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IColor
 {
-    public Color GetColor();
+    public ColorTag GetColor();
 }
