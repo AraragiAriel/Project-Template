@@ -51,7 +51,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5227840857117301088}
   m_Layer: 0
-  m_Name: Editor
+  m_Name: Debugging
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -410,7 +410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6376074768986878577, guid: c79274161caf22a4780f1ed97becef0f, type: 3}
       propertyPath: m_Name
-      value: Test Object
+      value: Dev Tools
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

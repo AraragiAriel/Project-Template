@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioVolumeSetter : MonoBehaviour
 {
     [SerializeField] private bool sfx = true;
+
     private AudioSource audioSource;
-    private List<AudioMult> mults = new();
     private RID settingsID = new();
+    private CompositeValue volume = new(){
+        baseValue = 1f,
+    };
 
     private float settingsVolume => sfx ? AudioManager.sfxVolume : AudioManager.bgmVolume;
     
@@ -16,59 +17,22 @@ public class AudioVolumeSetter : MonoBehaviour
     }
 
     private void OnEnable(){
-        StaticActions.OnGameSettingsChange += SetSettingsMult;
+        StaticActions.OnGameSettingsChange += ApplySettings;
+        volume.OnValueChange += SetVolume;
     }
 
     private void OnDisable(){
-        StaticActions.OnGameSettingsChange -= SetSettingsMult;        
+        StaticActions.OnGameSettingsChange -= ApplySettings;    
+        volume.OnValueChange -= SetVolume;    
     }
 
     private void Start(){
-        SetSettingsMult();
+        ApplySettings();
     }
 
-    public void SetMult(RID id, float value){
-        bool found = false;
-        foreach(AudioMult mult in mults)
-            if(mult.id == id){
-                mult.value = value;
-                found = this;
-                break;
-            }
-        if(!found)
-            mults.Add(new AudioMult(id, value));
+    public void SetMult(RID id, float value) => volume.SetMod(new ValueMod(id, value, ValueMod.Type.Mult));
+    public void RemoveMult(RID id) => volume.RemoveMod(id);    
+    private void SetVolume(float value) => audioSource.volume = value;
 
-        SetVolume();
-    }
-
-    public void RemoveMult(RID id){
-        foreach(AudioMult mult in mults)
-            if(mult.id == id){
-                mults.Remove(mult);
-                break;
-            }
-
-        SetVolume();
-    }
-    
-    private void SetVolume(){
-        float volume = 1f;
-        foreach(AudioMult mult in mults)
-            volume *= mult.value;
-        audioSource.volume = volume;
-    }
-
-    private void SetSettingsMult(){
-        SetMult(settingsID, settingsVolume);
-    }
-}
-
-public class AudioMult{
-    public RID id;
-    public float value;
-
-    public AudioMult(RID id, float value){
-        this.id = id;
-        this.value = value;
-    }
+    private void ApplySettings() => SetMult(settingsID, settingsVolume);
 }

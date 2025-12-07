@@ -14,6 +14,6 @@ public class SfxTrigger : MonoBehaviour
         // if(atPosition)
         //     AudioManager.PlayClip(clipsData.clips[index], transform.position);
         // else
-            AudioManager.Play(clipsData.clips[index]);
+            AudioManager.Play(new AudioManager.Parameters(clipsData.clips[index]));
     }
 }

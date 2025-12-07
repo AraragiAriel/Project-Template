@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public enum PitchType{
@@ -8,42 +9,71 @@ public enum PitchType{
     Custom = 2,
 }
 
+public enum DelayType{
+    None = 0,
+    DefaultValue = 1,
+    To = 2,
+    FromTo = 3,
+}
+
 [CreateAssetMenu(fileName = "ClipData", menuName = "ScriptableObject/Clip Data")]
 public class ClipData : ScriptableObject
 {
     public const float defaultPitch = .1f;
+    public const float defaultDelay = .1f;
 
+    [Space()]
     public AudioClip clip;
     [Range(0f, 1f)] public float volume = 1f;
+
+    [Header("Pitch")]
     [Range(.1f, 2f)] public float basePitch = 1f;
     public PitchType pitchType = PitchType.None;
+    [Tooltip("Random value: [basePitch - customPitch, basePitch + customPitch]")]
     public float customPitch = 0f;
 
-    public float pitchRange{
+    [Header("Delay")]
+    public DelayType delayType = DelayType.None;
+    [Range(0f, .5f)] public float delayFrom = 0f;
+    [Range(0f, .5f)] public float delayTo = 0f;
+
+    public float pitch{
         get{
             switch(pitchType){
                 case PitchType.None:
-                    return 0f;
+                    return basePitch;
                 case PitchType.DefaultValue:
-                    return defaultPitch;
+                    return basePitch + Random.Range(-defaultPitch, defaultPitch);
                 case PitchType.Custom:
-                    return customPitch;
+                    return basePitch + Random.Range(-customPitch, customPitch);
+                default:
+                    return basePitch;
+            }
+        }
+    }
+
+    public float delay{
+        get{
+            switch(delayType){
+                case DelayType.None:
+                    return 0f;
+                case DelayType.DefaultValue:
+                    return Random.Range(0f, defaultDelay);
+                case DelayType.To:
+                    return Random.Range(0f, delayTo);
+                case DelayType.FromTo:
+                    return Random.Range(delayFrom, delayTo);
                 default:
                     return 0f;
             }
         }
     }
 
-    public float pitch{
-        get{
-            float range = pitchRange;
-            return Random.Range(basePitch - range, basePitch + range);
-        }
-    }
-
     private void OnValidate(){
         basePitch = Util.Round(basePitch, .1f);
         volume = Util.Round(volume, .05f);
+        delayFrom = Util.Round(delayFrom, .05f);
+        delayTo = Util.Round(delayTo, .05f);
     }
 }
 

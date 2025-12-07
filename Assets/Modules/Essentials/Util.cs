@@ -254,7 +254,7 @@ public static class Util
     
     public static bool Even(this int i) => i % 2 == 0;
     public static bool Odd(this int i) => i % 2 == 1;
-    public static int Next(this int i, int max) => i + 1 > max ? 0 : i +1;
+    public static int Next(this int i, int max) => i + 1 > max ? 0 : i + 1;
 
     public static string ToPercent(this float f){
         return (f*100).ToString() + "%";

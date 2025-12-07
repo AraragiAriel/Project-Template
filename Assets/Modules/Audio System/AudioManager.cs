@@ -5,24 +5,15 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     // STATIC
-    private const int initialAmount = 20;
     private static AudioManager instance;
 
-    public static void Play(ClipData clipData, float timer = 0f){
-        if(!Check(clipData))
+    public static void Play(ClipData data) => Play(new Parameters(data));
+    public static void Play(Parameters parameters){
+        if(!Check(parameters.data))
             return;
 
-        instance.GetSource().Set2D(clipData, timer);
+        instance.PlayClip(parameters);
     }
-      
-    public static void Play(ClipData clipData, Vector2 pos, float timer = 0f){
-        if(!Check(clipData))
-            return;
-
-        instance.GetSource().Set3D(clipData, pos, timer);
-    }
-
-    #region UTILITIES
 
     private static bool Check(ClipData clipData){
         if(clipData == null)
@@ -36,9 +27,9 @@ public class AudioManager : MonoBehaviour
     public static float sfxVolume => Res.data.gameSettings.sfxVolume;
     public static float bgmVolume => Res.data.gameSettings.bgmVolume;
 
-    #endregion
-
     // INSTANCE
+    private const int initialAmount = 20;
+
     [SerializeField] private AudioSourceManager audioSourcePrefab;
     private List<AudioSourceManager> sources = new();
 
@@ -56,6 +47,15 @@ public class AudioManager : MonoBehaviour
             AddSource();
     }
 
+    private void PlayClip(Parameters parameters){
+        StartCoroutine(PlayCo(parameters));
+    }
+
+    private IEnumerator PlayCo(Parameters parameters){
+        yield return new WaitForSeconds(parameters.data.delay);
+        GetSource().Play(parameters);        
+    }
+
     public AudioSourceManager GetSource(){
         foreach(AudioSourceManager source in sources)
             if(!source.isPlaying)
@@ -68,5 +68,16 @@ public class AudioManager : MonoBehaviour
         AudioSourceManager newSource = Instantiate(audioSourcePrefab, this.transform);
         sources.Add(newSource);
         return newSource;
+    }
+
+    public class Parameters{
+        public ClipData data;
+        public float timer = 0f;
+        public bool usePos = false;
+        public Vector2 pos = default;
+
+        public Parameters(ClipData data){
+            this.data = data;
+        }
     }
 }

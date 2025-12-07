@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class AudioSourceManager : MonoBehaviour
 {
-    [Resource(ResourceAttribute.Tag.Prefab)] public AudioSourceManager audioSourcePrefab;
-
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioVolumeSetter volumeSetter;
     [Range(0f, 1f)]
     [SerializeField] private float spatialBlend;
 
-    private RID id = new();
+    private RID id;
 
     public bool isPlaying{get{return audioSource.isPlaying;}}
 
@@ -22,26 +20,21 @@ public class AudioSourceManager : MonoBehaviour
     private void OnDisable(){
         StaticActions.OnSceneChange -= OnSceneChange;        
     }
-    
-    public void Set3D(ClipData data, Vector2 pos, float timer){
-        transform.position = pos;
-        audioSource.spatialBlend = spatialBlend;
-        Set(data, timer);
-    }
-    
-    public void Set2D(ClipData data, float timer){
-        audioSource.spatialBlend = 0f;
-        Set(data, timer);
-    }
 
-    private void Set(ClipData data, float timer){
+    public void Play(AudioManager.Parameters parameters){
         if(isPlaying)
             Debug.LogWarning("overwriting active audio source");
 
-        audioSource.clip = data.clip;
-        volumeSetter.SetMult(id, data.volume);
-        audioSource.pitch = data.pitch;
-        audioSource.time = data.clip.length*timer;
+        if(parameters.usePos){
+            transform.position = parameters.pos;
+            audioSource.spatialBlend = spatialBlend;
+        } else {
+            audioSource.spatialBlend = 0f;
+        }
+        audioSource.clip = parameters.data.clip;
+        volumeSetter.SetMult(id, parameters.data.volume);
+        audioSource.pitch = parameters.data.pitch;
+        audioSource.time = parameters.data.clip.length*parameters.timer;
         audioSource.Play();
     }
 
