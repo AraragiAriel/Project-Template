@@ -7,7 +7,7 @@ using UnityEngine;
 public class ColorTagsData : ScriptableObject
 {
     public List<ScriptableObject> colors = new();
-    private Dictionary<string, IColor> dict = new();
+    public Dictionary<string, IColor> dict {get; private set;} = new();
 
     public void Populate(){
         dict.Clear();

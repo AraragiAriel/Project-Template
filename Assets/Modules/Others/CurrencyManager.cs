@@ -5,7 +5,8 @@ public class CurrencyManager : MonoBehaviour
 {
     // STATIC
 
-    public static CurrencyManager instance;
+    public static CurrencyManager _instance;
+    public static CurrencyManager instance => _instance??= FindFirstObjectByType<CurrencyManager>();
 
     private static List<CurrencyAmount> currencies => Res.save.currencySave.currencies;
 
@@ -20,10 +21,6 @@ public class CurrencyManager : MonoBehaviour
         public ClipData spendClip;
     };
     [SerializeField] private List<Modifier> modifiers = new();
-
-    private void Awake(){
-        instance = this;
-    }
 
     private void OnEnable(){
         foreach(var modifier in modifiers){
@@ -111,14 +108,14 @@ public class CurrencyManager : MonoBehaviour
 
     private float Gain(Currency type){
         foreach(var modifier in modifiers)
-            if(modifier.type == type)
+            if(modifier.type == type && modifier.gain != null)
                 return modifier.gain;
         return 1f;
     }
 
     private float Discount(Currency type){
         foreach(var modifier in modifiers)
-            if(modifier.type == type)
+            if(modifier.type == type && modifier.discount != null)
                 return modifier.discount;
         return 0f;
     }
@@ -152,6 +149,8 @@ public struct CurrencyAmount{
 
 public enum Currency{
     [EnumSkip] Null = 0,
+    [Localize("Ticket", "name")] Ticket = 1,
+    [Localize("Token", "name")] Token = 2,
 }
 
 public static class CurrencyExtension{

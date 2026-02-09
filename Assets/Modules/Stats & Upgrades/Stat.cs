@@ -54,5 +54,23 @@ public class Stat : UIDAsset, IColor
         public Stat stat;
         public float value;
         public ValueMod.Type type;
+
+        public void SetMod(RID id, float mult = 1f){
+            stat.SetModifier(new ValueMod(id, mult*value, type));
+        }
+
+        public void RemoveMod(RID id){
+            stat.RemoveModifier(id);
+        }
+
+        public string Format(float mult = 1f, bool includeStat = true, bool includeColor = true){
+            string s = "";
+            s += $"{ValueMod.Format(mult*value, type, stat.isPercent)}";
+            if(includeStat)
+                s += $" {stat.statName}";
+            if(includeColor)
+                s.ColorWrap(stat.color);
+            return s;
+        }
     }
 }
