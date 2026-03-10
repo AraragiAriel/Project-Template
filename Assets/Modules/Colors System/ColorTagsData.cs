@@ -9,7 +9,8 @@ public class ColorTagsData : ScriptableObject
     public List<ScriptableObject> colors = new();
     public Dictionary<string, IColor> dict {get; private set;} = new();
 
-    public void Populate(){
+    public void Populate()
+    {
         dict.Clear();
         foreach(var data in colors){
             var color = data as IColor;
@@ -20,11 +21,10 @@ public class ColorTagsData : ScriptableObject
 
     public Color Get(string tag) => dict[tag].GetColor();
 
-    public string Parse(string s){
-        foreach(var kvp in dict){
-            s = s.Replace($"<{kvp.Key}>", $"<color=#{ColorUtility.ToHtmlStringRGBA(kvp.Value.GetColor())}>");
-            s = s.Replace($"</{kvp.Key}>", $"</color>");
-        }
+    public string Parse(string s)
+    {
+        foreach(var kvp in dict)
+            s = s.Replace($"color=<{kvp.Key}>", $"<color=#{ColorUtility.ToHtmlStringRGBA(kvp.Value.GetColor())}>");
         return s;
     }
 }
@@ -33,14 +33,16 @@ public class ColorAttribute : Attribute
 {
     public string key;
     
-    public ColorAttribute(string key){
+    public ColorAttribute(string key)
+    {
         this.key = key;
     }
 }
 
 public static class ColorAttributeExtension
 {
-    public static Color GetColor(this Enum value){
+    public static Color GetColor(this Enum value)
+    {
         var member = value.GetType().GetMember(value.ToString())[0];
         var attr = member.GetCustomAttribute<ColorAttribute>();
         return attr != null ? Res.data.colorTags.Get(attr.key) : Color.white;

@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Collections;
 
 public class Tooltip : MonoBehaviour
 {
@@ -13,24 +14,34 @@ public class Tooltip : MonoBehaviour
     public RectTransform tooltipRect => _tooltipRect ??= transform.GetChild(0).GetComponent<RectTransform>();
     
     private CanvasGroup _canvasGroup;
-    private CanvasGroup canvasGroup => _canvasGroup ??= GetComponentInChildren<CanvasGroup>();
+    private CanvasGroup canvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
 
     private const float duration = .25f;
     private const Ease ease = Ease.OutSine;
-
-    public Action<TooltipData> OnSetup;
     
     protected TooltipData data;
 
     public void Set(TooltipData data){
         // SETUP
+        canvasGroup.alpha = 0f;
         this.data = data;
-        Setup();
-        
-        // SET POSITION
+        if(TryGetComponent(out TooltipSetup setup))
+        {
+            setup.Setup(data);
+        }
+        Canvas.ForceUpdateCanvases();
+
+        StartCoroutine(SetPosition());
+    }
+
+    private IEnumerator SetPosition()
+    {
+        yield return new WaitForEndOfFrame();
+
         var thisRect = GetRect(tooltipRect);
         var rects = data.rects.Select(rect => GetRect(rect)).ToList();
         Vector2 finalPos = Vector2.zero;
+        // Util.Debug($"this rect: [{thisRect.width}; {thisRect.height}]");
         foreach(int i in (rects.Count - 1).To(0)){
             bool found = false;
 
@@ -87,11 +98,7 @@ public class Tooltip : MonoBehaviour
 
         Complete();
         canvasGroup.alpha = 0f;
-        canvasGroup.DOFade(1f, duration).SetEase(ease);
-    }
-
-    protected void Setup(){
-        OnSetup?.Invoke(data);
+        canvasGroup.DOFade(1f, duration).SetEase(ease);   
     }
 
     public void Deselect(){

@@ -11,16 +11,25 @@ public class ButtonStylerEditor : Editor
 
         GUILayout.Space(16);
 
-        if(GUILayout.Button("APPLY STYLE"))
-        {
-            script.ApplyStyle();
-            EditorUtility.SetDirty(script);
-        }
-        if(GUILayout.Button("READ STYLE"))
-        {
-            script.ReadStyle();
-            if(script.data != null)
-                EditorUtility.SetDirty(script.data);
-        }
+        GUILayout.BeginHorizontal();
+
+            var old = GUI.backgroundColor;
+            GUI.backgroundColor = Color.green;
+            if(GUILayout.Button("READ\nSTYLE"))
+            {
+                script.ReadStyle();
+                if(script.data != null)
+                    EditorUtility.SetDirty(script.data);
+            }
+
+            GUI.backgroundColor = Color.red;
+            if(GUILayout.Button("APPLY\nSTYLE"))
+            {
+                script.ApplyStyle();
+                EditorUtility.SetDirty(script);
+            }
+            GUI.backgroundColor = old;
+
+        GUILayout.EndHorizontal();
     }
 }

@@ -8,8 +8,15 @@ public class Popup : MonoBehaviour
     public class Parameters{
         public Vector2 pos = Vector2.zero;
         public string s = "";
-        public Color color = Color.white;
-        public float mult = 1f;
+        private float _mult = 1f;
+        public float mult{
+            get => _mult;
+            set{
+                _mult = value;
+                sqrtMult = Mathf.Sqrt(mult);
+            }
+        }
+        public float sqrtMult{get; private set;}
         public float angle = 55f;
         public float radius = .25f;
         public bool right = true;
@@ -39,7 +46,6 @@ public class Popup : MonoBehaviour
     private void Set(Parameters param){
         this.param = param;
         tmp.Set(param.s);
-        tmp.color = param.color;
         duration *= param.mult;
         
         StartCoroutine(TweenCo());
@@ -49,9 +55,9 @@ public class Popup : MonoBehaviour
         Transform t = transform;
         t.position = new Vector2(t.position.x, t.position.y);
 
-        t.DOLocalJump(t.localPosition + Vector3.up*param.step.y, jumpPower*param.mult, 1, duration);
+        t.DOLocalJump(t.localPosition + Vector3.up*param.step.y, jumpPower*param.sqrtMult, 1, duration);
         t.DOMoveX(t.position.x +  param.step.x, duration).SetEase(moveEase);
-        t.DOPunchScale(Vector3.one*scale*param.mult, duration, vibrato, elasticity).SetEase(moveEase);
+        t.DOPunchScale(Vector3.one*scale*param.sqrtMult, duration, vibrato, elasticity).SetEase(moveEase);
 
         yield return new WaitForSeconds(duration*fadeDelay);
 

@@ -87,6 +87,18 @@ public static class Util
             .ToList();
     }
 
+    public static Color AverageColor(List<Color> colors)
+    {
+        if(colors.Count == 0)
+            return Color.white;
+
+        var sum = Color.black;
+        foreach(var color in colors)
+            sum += color;
+        
+        return sum/colors.Count;
+    }
+
     #region FORMATTING
 
     public static string Concat(float value, bool allowDecimal = true, int digits = 3, bool round = true){
@@ -154,21 +166,23 @@ public static class Util
 
     #region RANDOM
 
-    public static Vector2 randDir{
-        get{
-            float angle = UnityEngine.Random.Range(0f, 2*Mathf.PI);
-            return new Vector2(
-                Mathf.Cos(angle),
-                Mathf.Sin(angle)
-            );
-        }
+    public static Vector2 RandDir(float from, float to)
+    {
+        float angle = UnityEngine.Random.Range(from, to)*Mathf.Deg2Rad;
+        return new Vector2(
+            Mathf.Cos(angle),
+            Mathf.Sin(angle)
+        );  
     }
+    public static Vector2 randDir => RandDir(0f, 360f);
     public static Vector2 randPos => randDir*UnityEngine.Random.Range(0f, 1f);
     public static int randSign => UnityEngine.Random.Range(0, 2) == 0 ?  1 : -1;
     public static bool randBool => ChanceCheck(.5f);
     public static bool ChanceCheck(float chance) => UnityEngine.Random.Range(0f, 1f) <= chance;
     public static float RandMult(float range) => UnityEngine.Random.Range(1f - range, 1f + range);
     public static float randMult => RandMult(.15f);
+    public static float RandSignedMult(float range) => randSign*RandMult(range);
+    public static float randSignedMult => randSign*randMult;
     public static int DrawWeightedIndex(List<float> chances){
         float sum = chances.Sum();
         if(sum <= 0f){

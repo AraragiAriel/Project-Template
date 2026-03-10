@@ -14,7 +14,6 @@ public class StringReplacer : MonoBehaviour
     public string Replace(string s){
         foreach (var kvp in placeholders)
             s = s.Replace("{" + kvp.Key + "}", kvp.Value);
-        s = Res.data.colorTags.Parse(s);
         return s;
     }
 }

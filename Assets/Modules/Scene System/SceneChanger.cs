@@ -58,29 +58,35 @@ public class SceneChanger : MonoBehaviour
     }
 
     private IEnumerator ChangeSceneCo(SceneType scene, SceneChangeAnimType animType){
-        SceneChangeAnim anim = anims.Find(a => a.type == animType);
-        bool skipAnim = anim == null || animType == SceneChangeAnimType.None;
         duringSceneChange = true;
+
+        SceneChangeAnim prefab = anims.Find(a => a.type == animType);
         StaticActions.OnSceneBeginChange?.Invoke(currentScene);
 
-        if(!skipAnim)
+        SceneChangeAnim anim = null;
+        if(prefab != null)
+            anim = Instantiate(prefab, transform);
+        if(anim != null){
             yield return StartCoroutine(anim.FadeIn());
-
+        }
         StaticActions.OnSceneUnload?.Invoke(currentScene);
         currentScene = scene;
-        SceneManager.LoadScene(scenesDict.Get(scene));
-        // var task = SceneManager.LoadSceneAsync(GetSceneName(data.scene));
-        // task.allowSceneActivation = false;
-        // while(task.progress < .9f)
-        //     yield return new WaitForEndOfFrame();
+        // SceneManager.LoadScene(scenesDict.Get(scene));
+        var task = SceneManager.LoadSceneAsync(scenesDict.Get(scene));
+        task.allowSceneActivation = false;
+        while(task.progress < .9f)
+            yield return new WaitForEndOfFrame();
 
-        // task.allowSceneActivation = true;
+        task.allowSceneActivation = true;
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
-        duringSceneChange = false;
+
         StaticActions.OnSceneChange?.Invoke(currentScene);
 
-        if(!skipAnim)
+        if(anim != null){
             yield return StartCoroutine(anim.FadeOut());
+            Destroy(anim.gameObject);
+        }
+        duringSceneChange = false;
     }
 }

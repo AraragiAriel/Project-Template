@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Text.RegularExpressions;
 
 public static class StringManager
 {
@@ -13,4 +14,6 @@ public static class StringManager
 
     public static void Set(this TMP_Text tmp, string s, StringReplacer replacer = null)
         => tmp.text = s.Parse(replacer);
+        
+    public static string RemoveTags(this string s) => Regex.Replace(s, "<.*?>", string.Empty);
 }

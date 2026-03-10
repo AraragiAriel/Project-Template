@@ -14,19 +14,41 @@ public class Stat : UIDAsset, IColor
     public LocalizedString description;
     public Sprite icon;
     public ColorTag color;
+
+    [Header("Formatting")]
     public bool isPercent = false;
     public bool allowDecimal = true;
-    public bool usePercent = false;
 
     public ColorTag GetColor() => color;
 
-    public string valueText{
-        get{
-            if(!isPercent)
-                return Util.Concat(value, allowDecimal);
-            else
-                return Util.Concat(value*100, allowDecimal) + "%";
+    public string ValueText()
+    {
+        if(!isPercent)
+            return Util.Concat(value, allowDecimal);
+        else
+            return Util.Concat(value*100, allowDecimal) + "%";
+    }
+
+    public string BreakdownText()
+    {
+        string s = "= ";
+        if(!isPercent)
+        {
+            s += "(";
+            string flat = Util.Concat(value.flatTotalValue, allowDecimal);
+            string percent = Util.FormatPercent(value.percentValue);
+            s += $"{flat} + {percent}";
+            s += ")";
+        } else
+        {
+            string percent = Util.FormatPercent(value.flatTotalValue);
+            s += $"{percent}";
         }
+        
+        foreach(var mult in value.Mults())
+            s += $" X{Util.Concat(mult)}";
+
+        return s;
     }
 
     public CompositeValue value;

@@ -76,11 +76,11 @@ public static class Extensions
 
 #region ANIMATOR
 
-    public static void SetClip(this Animator animator, AnimationClip clip){
-        if(animator.GetCurrentAnimatorStateInfo(0).IsName(clip.name)){
+    public static void PlayClip(this Animator animator, AnimationClip clip, bool dontRepeat = false){
+        if(dontRepeat && animator.GetCurrentAnimatorStateInfo(0).IsName(clip.name)){
             return;
         }
-        animator.Play(clip.name);
+        animator.Play(clip.name, 0, 0f);
     }
 
     public static void Randomize(this Animator anim){

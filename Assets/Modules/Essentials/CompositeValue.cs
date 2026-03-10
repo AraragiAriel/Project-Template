@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -68,26 +69,45 @@ public class CompositeValue
     }
 
     [Space(16)]
+
     public bool useMin = false;
     public float min = 0f;
     public bool useMax = false;
     public float max = 1f;
-    [Space(16)]
+    
+    [SerializeField] public List<ValueMod> mods {get; private set;} = new();
 
-    [SerializeField] private float value;
-    [SerializeField] private List<ValueMod> mods = new();
+    public List<float> Mults()
+    {
+        List<float> mults = new();
+        foreach(var mod in mods)
+            if(mod.type == ValueMod.Type.Mult)
+                mults.Add(mod.value);
+        mults = mults.OrderBy(m => m).ToList();
+        return mults;
+    }
+
+    [SerializeField] public float flatValue {get; private set;}
+    [SerializeField] public float flatTotalValue {get; private set;}
+    [SerializeField] public float percentValue {get; private set;}
+    [SerializeField] public float multValue {get; private set;}
+    [SerializeField] public float value {get; private set;}
 
     public int intValue => Mathf.RoundToInt(value);
     public bool boolValue => intValue >= 1;
     public Action<float> OnValueChange;
     public int modCount => mods.Count;
 
-    public void CalculateValue(){
-        float flatValue = 0f;
-        float percentValue = 0f;
-        float multValue = 1f;
+    public void CalculateValue()
+    {
+        flatValue = 0f;
+        flatTotalValue = 0f;
+        percentValue = 0f;
+        multValue = 1f;
+
         foreach(ValueMod mod in mods)
-            switch(mod.type){
+            switch(mod.type)
+            {
                 case ValueMod.Type.Flat:
                     flatValue += mod.value;
                     break;
@@ -99,11 +119,14 @@ public class CompositeValue
                     break;
             }
 
-        value = (baseValue + flatValue)*(1f + percentValue)*multValue;
+        flatTotalValue = baseValue + flatValue;
+        value = flatTotalValue*(1f + percentValue)*multValue;
+
         if(useMin)
             value = Mathf.Max(value, min);
         if(useMax)
             value = Mathf.Min(value, max);
+
         OnValueChange?.Invoke(value);
     }
 
@@ -126,10 +149,9 @@ public class CompositeValue
         for(int i = 0; i < mods.Count; i++)
             if(mods[i].id == id){
                 mods.RemoveAt(i);
+                CalculateValue();
                 break;
             }
-
-        CalculateValue();
     }
 
     public void Reset(){
