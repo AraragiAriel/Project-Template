@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ResolutionSwitch : MonoBehaviour
+public class FpsSwitch : MonoBehaviour
 {
     [SerializeField] private Selector selector;
-    [SerializeField] private LocalizedStringData adaptString;
+    [SerializeField] private List<LocalizedStringData> strings = new();
     private bool setDone = false;
 
     private void OnEnable(){
@@ -16,12 +16,11 @@ public class ResolutionSwitch : MonoBehaviour
     }
 
     private void Start(){
-        List<LocalizedString> resolutions = new();
-        resolutions.Add(adaptString.localizedString);
-        foreach(Vector2Int resolution in GameSettingsManager.resolutionsList)
-            resolutions.Add(resolution.x + "X" + resolution.y);
+        List<LocalizedString> aux = new();
+        foreach(LocalizedStringData data in strings)
+            aux.Add(data.localizedString);
         
-        selector.Set(resolutions, Res.data.gameSettings.selectedResolution);
+        selector.Set(aux, (int)Res.data.gameSettings.fpsType);
         setDone = true;
     }
 
@@ -29,7 +28,7 @@ public class ResolutionSwitch : MonoBehaviour
         if(!setDone)
             return;
             
-        Res.data.gameSettings.selectedResolution = id;
+        Res.data.gameSettings.fpsType = (FpsType)id;
         GameSettingsManager.instance.Apply();
     }
 }

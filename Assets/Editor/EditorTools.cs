@@ -55,7 +55,7 @@ public static class EditorTools
     }
 
     private static void SetUIDs(){
-        var data = Res.data.uidsData;
+        var data = Res.data.uids;
         data.uids.Clear();
 
         string path = "Assets";

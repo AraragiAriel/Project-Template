@@ -1,26 +1,38 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// [CreateAssetMenu(fileName = "GameSettingsData", menuName = "ScriptableObject/Others/GameSettingsData")]
 public class GameSettingsData : ScriptableObject
 {
-    [Resource(ResourceAttribute.Tag.Options)] public GameSettingsData gameSettings;
-
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     public bool toApply = false;
-    #endif
+#endif
     
+    [Header("Language")]
     public GameLanguage language = 0;
-    public int selectedResolution = 0;
-    public int selectedFps = 0;
-    public bool fullscreen = true;
+
+    [Header("Audio Volume")]
     [Range(0f, 1f)] public float bgmVolume = 1f;
     [Range(0f, 1f)] public float sfxVolume = 1f;
+
+    [Header("Screen Size")]
+    public List<Vector2Int> resolutions = new();
+    public bool fullscreen = true;
+    public int selectedResolution = 0;
+
+    [Header("FPS")]
+    public FpsType fpsType;
+    public int customFps = 0;
 }
 
 public enum GameLanguage{
     English = 0,
     Portuguese = 1,
+}
+
+public enum FpsType
+{
+    Vsync = 0,
+    Custom = 1,
+    Unlimited = 2,
 }

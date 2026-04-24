@@ -14,8 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toApply: 0
   language: 0
-  selectedResolution: 0
-  selectedFps: 0
-  fullscreen: 1
   bgmVolume: 1
   sfxVolume: 1
+  resolutions:
+  - {x: 1280, y: 720}
+  - {x: 1920, y: 1080}
+  - {x: 2560, y: 1440}
+  - {x: 3840, y: 2160}
+  fullscreen: 1
+  selectedResolution: 0
+  fpsList: 0f0000001e0000002d0000003c0000005a00000078000000f0000000
+  fpsType: 0
+  customFps: 0

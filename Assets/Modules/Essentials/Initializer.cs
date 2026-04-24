@@ -11,13 +11,14 @@ public static class Initializer
     # if UNITY_EDITOR
     [InitializeOnLoadMethod]
     # endif
-    private static void Initialize(){
+    private static void Initialize()
+    {
         Res.Initialize();
         GameStateManager.Initialize();
         DOTween.SetTweensCapacity(1250, 125);
 
         // POPULATE DICTS
-        Res.data.uidsData.Populate();
+        Res.data.uids.Populate();
         Res.data.localizationData.Populate();
         Res.data.colorTags.Populate();
     }

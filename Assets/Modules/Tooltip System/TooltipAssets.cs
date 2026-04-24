@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class TooltipAsset
+public class TooltipAssets
 {
     public List<Object> assets;
 

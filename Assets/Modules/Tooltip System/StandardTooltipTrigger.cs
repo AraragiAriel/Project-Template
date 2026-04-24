@@ -3,7 +3,7 @@ using UnityEngine;
 public class StandardTooltipTrigger : MonoBehaviour, ITooltip
 {
     [SerializeField] private Tooltip prefab;
-    [SerializeField] private TooltipAsset subTooltips;
+    [SerializeField] private TooltipAssets subTooltips;
 
     public TooltipData TooltipData() => new TooltipData{
         prefab = prefab,

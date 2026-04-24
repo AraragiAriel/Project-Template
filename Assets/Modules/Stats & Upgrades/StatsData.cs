@@ -5,8 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class StatsData : ScriptableObject
 {
-    [Resource(ResourceAttribute.Tag.Data)] public StatsData statsData;
-
     public List<Stat> stats = new();
 
     public Stat GetStat(string id){

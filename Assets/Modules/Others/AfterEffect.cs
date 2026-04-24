@@ -6,8 +6,6 @@ using DG.Tweening;
 
 public class AfterEffect : MonoBehaviour
 {
-    [Resource(ResourceAttribute.Tag.Prefab)] public AfterEffect afterEffect;
-
     public class Parameters{
         private const float defaultDuration = .6f;
         private const float defaultAlpha = .02f;

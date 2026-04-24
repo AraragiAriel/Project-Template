@@ -7,8 +7,6 @@ using DG.Tweening;
 
 public class ConfirmationBox : MonoBehaviour
 {
-    [Resource(ResourceAttribute.Tag.UI)] ConfirmationBox confirmationBox;
-
     public struct Parameters{
         public string description;
         public Action actionIfTrue;

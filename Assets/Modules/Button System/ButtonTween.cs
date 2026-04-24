@@ -3,7 +3,9 @@ using DG.Tweening;
 
 public class ButtonTween : MonoBehaviour
 {
-    [SerializeField] private RectTransform rect;
+    [SerializeField] private Transform t;
+
+    [Header("Tween")]
     [SerializeField] private float duration = .25f;
     [SerializeField] private float height;
     [SerializeField] private float scale;
@@ -27,7 +29,7 @@ public class ButtonTween : MonoBehaviour
     }
 
     private void Start(){
-        initialRot = rect.eulerAngles;
+        initialRot = t.localEulerAngles;
     }
 
     public void OnSelect(){
@@ -39,11 +41,9 @@ public class ButtonTween : MonoBehaviour
     }
 
     public void Tween(bool select){
-        rect.DOKill(true);
-        rect.DOScale(select ? scale : 1f, duration).SetEase(ease);
-        initialRot = rect.eulerAngles;
-        rect.DOShakeRotation(duration, new Vector3(0f, 0f, shakeStr), randomnessMode: ShakeRandomnessMode.Harmonic).SetEase(ease).onComplete = () => 
-            rect.DOLocalRotate(initialRot, duration*.25f);
-
+        t.DOKill(true);
+        t.DOScale(select ? scale : 1f, duration).SetEase(ease);
+        t.DOShakeRotation(duration, new Vector3(0f, 0f, shakeStr), randomnessMode: ShakeRandomnessMode.Harmonic).SetEase(ease).onComplete = () => 
+            t.DOLocalRotate(initialRot, duration*.25f);
     }
 }

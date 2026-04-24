@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class SpriteShadow : MonoBehaviour
 {
-    [Resource(ResourceAttribute.Tag.Prefab)] public GameObject spriteShadow;
-
     private const float dist = .25f;
     private Transform tParent, tChild;
     private SpriteRenderer srParent, srChild;

@@ -17,7 +17,7 @@ public class UIDAssetReferenceResolver : IExternalStringReferenceResolver
 
     public bool TryResolveReference(string id, out object value){
         if(!string.IsNullOrEmpty(id)){
-            value = Res.data.uidsData.Get<UIDAsset>(id);
+            value = Res.data.uids.Get<UIDAsset>(id);
             return value != null;
         }
 

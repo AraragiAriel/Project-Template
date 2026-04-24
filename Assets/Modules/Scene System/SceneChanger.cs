@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum SceneType{
+public enum SceneType
+{
     None = -1,
     Menu = 0,
     Main = 1,
 }
 
-public enum SceneChangeAnimType{
+public enum SceneChangeAnimType
+{
     None = 0,
 }
 
@@ -17,7 +19,8 @@ public class SceneChanger : MonoBehaviour
 {
     // STATIC
 
-    public static readonly Util.BiDictionary<SceneType, string> scenesDict = new Util.BiDictionary<SceneType, string>{
+    public static readonly Util.BiDictionary<SceneType, string> scenesDict = new Util.BiDictionary<SceneType, string>
+    {
         {SceneType.Menu,  "Menu"},
         {SceneType.Main,  "Main"},
     };
@@ -31,25 +34,38 @@ public class SceneChanger : MonoBehaviour
 
     [HideInInspector] public bool duringSceneChange = false;
 
-    private void Awake(){
-        if(instance != null){
+    private void Awake()
+    {
+        if(instance != null)
+        {
             Destroy(gameObject);
             return;
-        } else {
+        }
+        else
+        {
             instance = this;
             transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
         }
 
-        currentScene = scenesDict.Get(SceneManager.GetActiveScene().name);
+        try
+        {
+            currentScene = scenesDict.Get(SceneManager.GetActiveScene().name);
+        }
+        catch
+        {
+            currentScene = SceneType.None;
+        }
     }
 
-    private void Start(){
+    private void Start()
+    {
         duringSceneChange = false;
         StaticActions.OnSceneChange?.Invoke(currentScene);
     }
     
-    public void ChangeScene(SceneType scene, SceneChangeAnimType anim = SceneChangeAnimType.None){
+    public void ChangeScene(SceneType scene, SceneChangeAnimType anim = SceneChangeAnimType.None)
+    {
         if(duringSceneChange)
             return;
 
@@ -57,7 +73,8 @@ public class SceneChanger : MonoBehaviour
         StartCoroutine(ChangeSceneCo(scene, anim));
     }
 
-    private IEnumerator ChangeSceneCo(SceneType scene, SceneChangeAnimType animType){
+    private IEnumerator ChangeSceneCo(SceneType scene, SceneChangeAnimType animType)
+    {
         duringSceneChange = true;
 
         SceneChangeAnim prefab = anims.Find(a => a.type == animType);
@@ -66,7 +83,8 @@ public class SceneChanger : MonoBehaviour
         SceneChangeAnim anim = null;
         if(prefab != null)
             anim = Instantiate(prefab, transform);
-        if(anim != null){
+        if(anim != null)
+        {
             yield return StartCoroutine(anim.FadeIn());
         }
         StaticActions.OnSceneUnload?.Invoke(currentScene);
@@ -83,7 +101,8 @@ public class SceneChanger : MonoBehaviour
 
         StaticActions.OnSceneChange?.Invoke(currentScene);
 
-        if(anim != null){
+        if(anim != null)
+        {
             yield return StartCoroutine(anim.FadeOut());
             Destroy(anim.gameObject);
         }
