@@ -3,45 +3,55 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class ButtonEvents : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    [SerializeField] private ClipData onSelectClip, onDeselectClip, onClickClip;
+    [Header("Clips")]
+    [SerializeField] private ClipData onSelectClip;
+    [SerializeField] private ClipData onDeselectClip;
+    [SerializeField] private ClipData onClickClip;
 
-    [Space]
-    
+    [Header("Events")]
     public UnityEvent onSelect;
     public UnityEvent onDeselect;
-    public UnityEvent onLeftClick;
+    public UnityEvent onClick;
     public UnityEvent onRightClick;
     public UnityEvent onMiddleClick;
     public UnityEvent onAnyClick;
 
-    private Button button;
-
-    private void Awake(){
-        button = GetComponent<Button>();
+    public bool interactable
+    {
+        get => button.interactable;
+        set => button.interactable = value;
     }
 
-    public void OnPointerEnter(PointerEventData eventData){
+    private Button _button;
+    private Button button => _button ??= GetComponent<Button>();
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
         if(!button.interactable) return;
 
         onSelect?.Invoke();
         AudioManager.Play(onSelectClip);
     }
 
-    public void OnPointerExit(PointerEventData eventData){
+    public void OnPointerExit(PointerEventData eventData)
+    {
         if(!button.interactable) return;
         
         onDeselect?.Invoke();
         AudioManager.Play(onDeselectClip);
     }
 
-    public void OnPointerClick(PointerEventData eventData){
+    public void OnPointerClick(PointerEventData eventData)
+    {
         if(!button.interactable) return;
 
-        switch(eventData.button){
+        switch(eventData.button)
+        {
             case PointerEventData.InputButton.Left:
-                onLeftClick?.Invoke();
+                onClick?.Invoke();
                 break;
             case PointerEventData.InputButton.Right:
                 onRightClick?.Invoke();

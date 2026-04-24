@@ -115,6 +115,28 @@ public static class Extensions
 
 #endregion
 
+#region OTHERS
+
+    public static Rect GetScreenRect(this RectTransform rt){
+        Vector3[] corners = new Vector3[4];
+        rt.GetWorldCorners(corners);
+
+        Vector2 swCorner = CameraManager.instance.Get(CameraManager.Type.UI).WorldToScreenPoint(corners[0]);
+        Vector2 neCorner = CameraManager.instance.Get(CameraManager.Type.UI).WorldToScreenPoint(corners[2]);
+        return new Rect(swCorner, neCorner - swCorner);
+    }
+
+    public static void ToScreenPos(this RectTransform rt, Vector2 pos)
+    {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            rt.parent.GetComponent<RectTransform>(),
+            pos,
+            CameraManager.instance.Get(CameraManager.Type.UI),
+            out Vector2 localPos
+        );
+        rt.anchoredPosition = localPos;
+    }
+
     public static void SetAlpha(this Image image, float alpha){
         var aux = image.color;
         aux.a = alpha;
@@ -140,4 +162,6 @@ public static class Extensions
             remaining--;
         }
     }
+
+#endregion
 }

@@ -30,18 +30,32 @@ public static class Util
         return value; 
     }
 
-    public static void DestroyAllChildren(Transform t){
-        int count = t.childCount;
-        for(int i = count - 1; i >= 0; i--){
-            #if UNITY_EDITOR
-                if(!EditorApplication.isPlaying)
-                    GameObject.DestroyImmediate(t.GetChild(i).gameObject);
-                else
-                    GameObject.Destroy(t.GetChild(i).gameObject);
-            #else
-                GameObject.Destroy(t.GetChild(i).gameObject);
-            #endif
-        }
+    public static void Destroy(Object obj)
+    {
+        if(obj is GameObject && (obj as GameObject).TryGetComponent(out DontClear _))
+            return;
+
+        #if UNITY_EDITOR
+            if(!EditorApplication.isPlaying)
+                UnityEditor.Undo.DestroyObjectImmediate(obj);
+            else
+                GameObject.Destroy(obj);
+        #else
+            GameObject.Destroy(obj);
+        #endif
+    }
+
+    public static void DestroyAll(List<Object> objects)
+    {
+        int count = objects.Count;
+        for(int i = count - 1; i >= 0; i--)
+            Destroy(objects[i]);
+    }
+    
+    public static void DestroyAllChildren(Transform t)
+    {
+        for(int i = t.childCount - 1; i >= 0; i--)
+            Destroy(t.GetChild(i).gameObject);
     }
     
     public static Vector2 RotateVector2(Vector2 original, float angle){

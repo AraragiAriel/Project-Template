@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.EditorTools;
 using UnityEngine;
 
 public enum PitchType{
@@ -27,7 +26,7 @@ public class ClipData : ScriptableObject
     [Range(0f, 1f)] public float volume = 1f;
 
     [Header("Pitch")]
-    [Range(.1f, 2f)] public float basePitch = 1f;
+    public float basePitch = 1f;
     public PitchType pitchType = PitchType.None;
     [Tooltip("Random value: [basePitch - customPitch, basePitch + customPitch]")]
     public float customPitch = 0f;
@@ -36,6 +35,11 @@ public class ClipData : ScriptableObject
     public DelayType delayType = DelayType.None;
     [Range(0f, .5f)] public float delayFrom = 0f;
     [Range(0f, .5f)] public float delayTo = 0f;
+
+#if UNITY_EDITOR
+    [Header("Check")]
+    public bool implementado = false;
+#endif
 
     public float pitch{
         get{
@@ -70,10 +74,10 @@ public class ClipData : ScriptableObject
     }
 
     private void OnValidate(){
-        basePitch = Util.Round(basePitch, .1f);
+        basePitch = Util.Round(basePitch, .05f);
         volume = Util.Round(volume, .05f);
-        delayFrom = Util.Round(delayFrom, .05f);
-        delayTo = Util.Round(delayTo, .05f);
+        delayFrom = Util.Round(delayFrom, .01f);
+        delayTo = Util.Round(delayTo, .01f);
     }
 }
 

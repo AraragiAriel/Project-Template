@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3101834806034126231}
+  - component: {fileID: 6850527271507810233}
   m_Layer: 0
   m_Name: Cameras
   m_TagString: Untagged
@@ -32,6 +33,23 @@ Transform:
   - {fileID: 4108167717316542341}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6850527271507810233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2973960608315667638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2f60e1103d051459e628378c1540da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraManager
+  cameras:
+  - type: 1
+    camera: {fileID: 6121281387147955966}
+  - type: 2
+    camera: {fileID: 6121281387147955966}
 --- !u!1001 &5657360143475698147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92,5 +110,10 @@ PrefabInstance:
 --- !u!4 &4108167717316542341 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8611410073969972838, guid: a143d8924f0f5c64bba2c32a3fb39bb3, type: 3}
+  m_PrefabInstance: {fileID: 5657360143475698147}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &6121281387147955966 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1905537139957327645, guid: a143d8924f0f5c64bba2c32a3fb39bb3, type: 3}
   m_PrefabInstance: {fileID: 5657360143475698147}
   m_PrefabAsset: {fileID: 0}

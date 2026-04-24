@@ -23,11 +23,16 @@ public class UIDs : ScriptableObject
     public void Populate(){
         dict.Clear();
         foreach(var asset in uids)
+        {
+            if(asset == null)
+                continue;
+                
             try{
                 dict.Add(asset.uid, asset);
             } catch {
                 Debug.LogWarning($"duplicate UID Asset: {asset.name}");
             }
+        }
     }
 
     private void OnValidate(){
