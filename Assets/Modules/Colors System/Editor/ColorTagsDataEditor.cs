@@ -11,10 +11,13 @@ public class ColorTagsDataEditor : Editor
 
         GUILayout.Space(16);
 
-        foreach(var kvp in data.dict){
-            var style = new GUIStyle(EditorStyles.label);
-            style.normal.textColor = kvp.Value.GetColor().color;
-            EditorGUILayout.LabelField(kvp.Value.GetColor().tag, style);
+        foreach(var kvp in data.dict)
+        {
+            var bgColor = kvp.Value.GetColor().color;
+            Color.RGBToHSV(bgColor, out var _, out var _, out var v);
+            var textColor = v > .5f ? Color.black : Color.white;
+
+            EditorUtil.DrawLabel(kvp.Value.GetColor().tag.TagWrap("b"), bgColor, textColor, 16);
         }
     }
 }

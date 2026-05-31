@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Linq;
-using System.Reflection;
+using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -30,7 +30,7 @@ public static class Util
         return value; 
     }
 
-    public static void Destroy(Object obj)
+    public static void Destroy(UnityEngine.Object obj)
     {
         if(obj is GameObject && (obj as GameObject).TryGetComponent(out DontClear _))
             return;
@@ -45,7 +45,7 @@ public static class Util
         #endif
     }
 
-    public static void DestroyAll(List<Object> objects)
+    public static void DestroyAll(List<UnityEngine.Object> objects)
     {
         int count = objects.Count;
         for(int i = count - 1; i >= 0; i--)
@@ -93,12 +93,18 @@ public static class Util
         return toDrop;
     }
 
-    public static List<T> EnumList<T>() where T : System.Enum{
-        return typeof(T)
-            .GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => !System.Attribute.IsDefined(f, typeof(EnumSkipAttribute)))
-            .Select(f => (T)f.GetValue(null))
-            .ToList();
+    public static List<T> EnumList<T>() where T : System.Enum
+    {
+        var list = System.Enum.GetValues(typeof(T)).Cast<T>().ToList();
+        foreach(var i in (list.Count - 1).To(0))
+        {
+            var field = typeof(T).GetField(list[i].ToString());
+            if(field != null && Attribute.GetCustomAttribute(field, typeof(EnumSkipAttribute)) != null)
+            {
+                list.RemoveAt(i);
+            }
+        }
+        return list;
     }
 
     public static Color AverageColor(List<Color> colors)
@@ -111,6 +117,13 @@ public static class Util
             sum += color;
         
         return sum/colors.Count;
+    }
+
+    public static float MirroredFraction(this float f)
+    {
+        int times = Mathf.FloorToInt(f);
+        float remainder = f % 1;
+        return times % 2 == 0 ? remainder : 1f - remainder;
     }
 
     #region FORMATTING
@@ -157,7 +170,8 @@ public static class Util
         return truncated;
     }
 
-    public static string FormatPercent(float value) => $"{SetDigits(value*100, 3).ToString(CultureInfo.InvariantCulture)}%";
+    public static string FormatPercent(float value, bool allowDecimal = true)
+        => $"{Concat(value*100, allowDecimal).ToString(CultureInfo.InvariantCulture)}%";
 
     public static string ExposeSign(float value, bool addSpace = false){
         string s = "";
@@ -166,14 +180,6 @@ public static class Util
             s += " ";
         s += Mathf.Abs(value).ToString(CultureInfo.InvariantCulture);
         return s;
-    }
-
-    public static string ColorWrap(this string s, Color color)
-        => $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{s}</color>";
-        
-    public static string TagWrap(this string s, string tag){
-        if(string.IsNullOrEmpty(tag)) return s;
-        return $"<{tag}>{s}</{tag}>";
     }
 
     #endregion
@@ -205,7 +211,7 @@ public static class Util
         }
 
         float partial = 0f;
-        float rand = Random.Range(0f, sum);
+        float rand = UnityEngine.Random.Range(0f, sum);
         foreach(int i in 0.To(chances.Count - 1)){
             partial += chances[i];
             if(partial >= rand)

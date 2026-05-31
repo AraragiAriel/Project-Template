@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "FPS Setting", menuName = "ScriptableObject/Game Settings/FPS")]
 public class FpsSetting : GameSetting
 {
     private const string fpsType = "fpsType";
@@ -8,7 +9,7 @@ public class FpsSetting : GameSetting
     public override void Load()
     {
         data.fpsType = (FpsType)PlayerPrefs.GetInt(fpsType, 0);
-        data.customFps = PlayerPrefs.GetInt(customFps, 0);
+        data.customFps = PlayerPrefs.GetInt(customFps, 60);
     }
 
     public override void Apply()

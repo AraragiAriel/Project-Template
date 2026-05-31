@@ -2,19 +2,25 @@ using System;
 using System.Globalization;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Language Setting", menuName = "ScriptableObject/Game Settings/Language")]
 public class LanguageSetting : GameSetting
 {
+    private const string language = "language";
+
     public override void Load()
     {        
-        int storedLanguage =  PlayerPrefs.GetInt("language", -1);
-        if(storedLanguage != -1)
-            // Language found in PlayerPrefs
-            data.language = (GameLanguage)Enum.ToObject(typeof(GameLanguage), storedLanguage);       
+        if(PlayerPrefs.HasKey(language))
+        {
+            // Language present in PlayerPrefs
+            int id = PlayerPrefs.GetInt(language, 0);
+            data.language = (GameLanguage)id;
+        }
         else
         {
-            // Not found, try to match system language
+            // Not present, try to match system language
             CultureInfo ci = CultureInfo.CurrentUICulture;
-            switch(ci.ThreeLetterWindowsLanguageName){
+            switch(ci.ThreeLetterWindowsLanguageName)
+            {
                 case "ENU":
                     data.language = GameLanguage.English;
                     break;
@@ -34,6 +40,6 @@ public class LanguageSetting : GameSetting
 
     public override void Save()
     {
-        PlayerPrefs.SetInt("language", (int)data.language);
+        PlayerPrefs.SetInt(language, (int)data.language);
     }
 }

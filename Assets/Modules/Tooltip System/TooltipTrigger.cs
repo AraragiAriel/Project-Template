@@ -97,24 +97,7 @@ public class TooltipData{
     public Tooltip prefab;
     public List<RectTransform> rects = new();
     public List<ITooltip> subTooltips = new();
-    public TooltipReplacer replacer = new();
-}
-
-public class TooltipReplacer{
-    private Dictionary<string, string> placeholders = new();
-    public void Add(string key, string value){
-        if(placeholders.ContainsKey(key))
-            placeholders[key] = value;
-        else
-            placeholders.Add(key, value);
-    }
-
-    public string Replace(string s){
-        foreach (var kvp in placeholders)
-            s = s.Replace("{" + kvp.Key + "}", kvp.Value);
-        s = Res.data.colorTags.Parse(s);
-        return s;
-    }
+    public StringReplacer replacer = new();
 }
 
 public interface ITooltip{

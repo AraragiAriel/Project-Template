@@ -25,12 +25,12 @@ public class LanguageButton : MonoBehaviour
     }
 
     public void Click(){
-        Res.data.gameSettings.language = language;
-        GameSettingsManager.instance.Apply();
+        Res.data.gameSettingsData.language = language;
+        GameSettingsManager.Apply();
     }
 
     private void GameSettingsChange(){
-        bool current = language == Res.data.gameSettings.language;
+        bool current = language == Res.data.gameSettingsData.language;
         canvasGroup.DOKill();
         canvasGroup.DOFade(current ? 1f : alpha, duration).SetEase(ease);
     }

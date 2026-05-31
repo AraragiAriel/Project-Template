@@ -1,19 +1,42 @@
-using System.Collections.Generic;
+using System;
+using Steamworks.Data;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Screen Size Setting", menuName = "ScriptableObject/Game Settings/Screen Size")]
 public class ScreenSizeSetting : GameSetting
 {
+    private const string fullscreen = "fullscreen";
+    private const string native = "native";
+    private const string resolution = "resolution";
+
     public override void Load()
     {
-        data.fullscreen = PlayerPrefs.GetInt("fullscreen", 1) == 1;
-        data.selectedResolution = PlayerPrefs.GetInt("resolution", -1);
+        data.fullscreen = PlayerPrefs.GetInt(fullscreen, 1) == 1;
+        data.nativeResolution = PlayerPrefs.GetInt(native, 1) == 1;
+        if (PlayerPrefs.HasKey(resolution))
+        {
+            // resolution present in player prefs
+            data.selectedScreenSize = (ScreenSize)PlayerPrefs.GetInt(resolution, 0);
+        }
+        else
+        {
+            // resolution not present, try to match native
+            data.selectedScreenSize = ScreenSize._1920x1080;
+            int heightToMatch = Display.main.systemHeight;
+            foreach(var screenSize in Util.EnumList<ScreenSize>())
+                if(screenSize.ToVector().y == heightToMatch)
+                {
+                    data.selectedScreenSize = screenSize;
+                    break;
+                }
+        }
     }
 
     public override void Apply()
     {
-        Vector2Int resolution = data.selectedResolution == -1 ? 
+        Vector2Int resolution = data.nativeResolution ? 
             new Vector2Int(Display.main.systemWidth, Display.main.systemHeight) :
-            data.resolutions[data.selectedResolution - 1];
+            data.selectedScreenSize.ToVector();
             
         Screen.SetResolution(
             resolution.x,
@@ -24,7 +47,8 @@ public class ScreenSizeSetting : GameSetting
 
     public override void Save()
     {
-        PlayerPrefs.SetInt("fullscreen", data.fullscreen ? 1 : 0);
-        PlayerPrefs.SetInt("resolution", data.selectedResolution);
+        PlayerPrefs.SetInt(fullscreen, data.fullscreen ? 1 : 0);
+        PlayerPrefs.SetInt(native, data.nativeResolution ? 1 : 0);
+        PlayerPrefs.SetInt(resolution, (int)data.selectedScreenSize);
     }
 }

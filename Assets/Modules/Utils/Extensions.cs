@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
 
 public static class Extensions
 {
@@ -31,6 +32,27 @@ public static class Extensions
 #region FLOAT
 
     public static string ToPercent(this float f) => (f*100).ToString() + "%";
+
+#endregion
+
+#region STRING
+
+    public static string TagWrap(this string s, string tag)
+    {
+        if(string.IsNullOrEmpty(tag))
+            return s;
+
+        var strings = tag.Split('=');
+        if(strings.Length < 2)
+            return $"<{tag}>{s}</{tag}>";
+        else
+            return $"<{tag}>{s}</{strings[0]}>";
+    }
+
+    public static string ColorWrap(this string s, Color color)
+        => TagWrap(s, $"color=#{ColorUtility.ToHtmlStringRGBA(color)}");
+        
+    public static string RemoveTags(this string s) => Regex.Replace(s, "<.*?>", string.Empty);
 
 #endregion
 
@@ -111,6 +133,16 @@ public static class Extensions
             new GradientAlphaKey(alpha2 ,1f),
         };
         gradient.SetKeys(colorKeys, alphaKeys);
+    }
+
+#endregion
+
+#region  COLORS
+
+    public static bool IsLight(this Color color)
+    {
+        Color.RGBToHSV(color, out var _, out var _, out var v);
+        return v >= .5f;
     }
 
 #endregion

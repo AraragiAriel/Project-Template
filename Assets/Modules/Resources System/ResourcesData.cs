@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourcesData : ScriptableObject
@@ -7,7 +8,8 @@ public class ResourcesData : ScriptableObject
 
     [Header("Data")]
     public CurrentSave currentSave;
-    public GameSettingsData gameSettings;
+    public GameSettingsData gameSettingsData;
+    public List<GameSetting> gameSettings = new();
     public ScenePersistentData scenePersistentData;
     public CurrenciesData currenciesData;
     public StatsData statsData;
@@ -15,12 +17,14 @@ public class ResourcesData : ScriptableObject
     public UIDs uids;
     public ColorTagsData colorTags;
     public LocalizationData localizationData;
+    public TmpAnimationsData tmpAnimationsData;
 
     [Header("Prefabs")]
     public AudioSourceManager audioSourcePrefab;
     public GameObject spriteShadow;
     public AfterEffect afterEffect;
     public Popup popup;
+    public GameSettingsScreen gameSettingsScreen;
 
     [Header("UI")]
     public ConfirmationBox confirmationBox;

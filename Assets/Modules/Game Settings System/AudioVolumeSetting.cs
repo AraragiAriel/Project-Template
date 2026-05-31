@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Audio Volume Setting", menuName = "ScriptableObject/Game Settings/Audio Volume")]
 public class AudioVolumeSetting : GameSetting
 {
     public override void Load()

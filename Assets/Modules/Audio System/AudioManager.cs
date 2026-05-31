@@ -24,8 +24,8 @@ public class AudioManager : MonoBehaviour
         return true;
     }
 
-    public static float sfxVolume => Res.data.gameSettings.sfxVolume;
-    public static float bgmVolume => Res.data.gameSettings.bgmVolume;
+    public static float sfxVolume => Res.data.gameSettingsData.sfxVolume;
+    public static float bgmVolume => Res.data.gameSettingsData.bgmVolume;
 
     // INSTANCE
     private const int initialAmount = 20;

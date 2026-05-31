@@ -149,8 +149,6 @@ public struct CurrencyAmount{
 
 public enum Currency{
     [EnumSkip] Null = 0,
-    [Localize("Ticket", "name")] Ticket = 1,
-    [Localize("Token", "name")] Token = 2,
 }
 
 public static class CurrencyExtension{

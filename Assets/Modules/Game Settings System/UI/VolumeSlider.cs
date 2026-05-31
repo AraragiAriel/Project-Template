@@ -2,44 +2,39 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-[RequireComponent(typeof(Slider))]
+[RequireComponent(typeof(MySlider))]
 public class VolumeSlider : MonoBehaviour
 {
     [SerializeField] private bool bgm;
-    [SerializeField] private TextMeshProUGUI tmp;
-    private Slider slider;
 
-    private void Awake(){
-        slider = GetComponent<Slider>();
+    private MySlider _slider;
+    private MySlider slider => _slider ??= GetComponent<MySlider>();
+
+    private void OnEnable()
+    {
+        slider.OnValueChange += SliderChange;
     }
 
-    private void OnEnable(){
-        slider.onValueChanged.AddListener(SliderChange);
+    private void OnDisable()
+    {
+        slider.OnValueChange -= SliderChange;   
     }
 
-    private void OnDisable(){
-        slider.onValueChanged.RemoveListener(SliderChange);        
-    }
-
-    private void Start(){
+    private void Start()
+    {
         float value =  bgm ? 
-            Res.data.gameSettings.bgmVolume :
-            Res.data.gameSettings.sfxVolume;
+            Res.data.gameSettingsData.bgmVolume :
+            Res.data.gameSettingsData.sfxVolume;
         slider.value = value;
-        SetText(value);
     }
 
-    private void SliderChange(float value){
+    private void SliderChange(float value)
+    {
         value = Util.SetDigits(value, 2, true);
         if(bgm)
-            Res.data.gameSettings.bgmVolume = value;
+            Res.data.gameSettingsData.bgmVolume = value;
         else
-            Res.data.gameSettings.sfxVolume = value;
-        GameSettingsManager.instance.Apply();
-        SetText(value);
-    }
-
-    private void SetText(float value){
-        tmp.text = Mathf.RoundToInt(value*100).ToString();
+            Res.data.gameSettingsData.sfxVolume = value;
+        GameSettingsManager.Apply();
     }
 }

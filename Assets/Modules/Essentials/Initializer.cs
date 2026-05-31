@@ -15,11 +15,13 @@ public static class Initializer
     {
         Res.Initialize();
         GameStateManager.Initialize();
+        GameSettingsManager.Initialize();
         DOTween.SetTweensCapacity(1250, 125);
 
         // POPULATE DICTS
         Res.data.uids.Populate();
         Res.data.localizationData.Populate();
         Res.data.colorTags.Populate();
+        Res.data.tmpAnimationsData.Populate();
     }
 }
