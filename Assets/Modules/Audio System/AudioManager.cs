@@ -8,14 +8,16 @@ public class AudioManager : MonoBehaviour
     private static AudioManager instance;
 
     public static void Play(ClipData data) => Play(new Parameters(data));
-    public static void Play(Parameters parameters){
+    public static void Play(Parameters parameters)
+    {
         if(!Check(parameters.data))
             return;
 
         instance.PlayClip(parameters);
     }
 
-    private static bool Check(ClipData clipData){
+    private static bool Check(ClipData clipData)
+    {
         if(clipData == null)
             return false;
         if(clipData.clip == null)
@@ -33,11 +35,15 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSourceManager audioSourcePrefab;
     private List<AudioSourceManager> sources = new();
 
-    private void Awake(){
-        if(instance != null){
+    private void Awake()
+    {
+        if(instance != null)
+        {
             Destroy(gameObject);
             return;
-        } else {
+        }
+        else
+        {
             instance = this;
             transform.parent = null;
             DontDestroyOnLoad(gameObject);
@@ -47,16 +53,19 @@ public class AudioManager : MonoBehaviour
             AddSource();
     }
 
-    private void PlayClip(Parameters parameters){
+    private void PlayClip(Parameters parameters)
+    {
         StartCoroutine(PlayCo(parameters));
     }
 
-    private IEnumerator PlayCo(Parameters parameters){
+    private IEnumerator PlayCo(Parameters parameters)
+    {
         yield return new WaitForSeconds(parameters.data.delay);
         GetSource().Play(parameters);        
     }
 
-    public AudioSourceManager GetSource(){
+    public AudioSourceManager GetSource()
+    {
         foreach(AudioSourceManager source in sources)
             if(!source.isPlaying)
                 return source;
@@ -64,19 +73,22 @@ public class AudioManager : MonoBehaviour
         return AddSource();
     }
 
-    public AudioSourceManager AddSource(){
+    public AudioSourceManager AddSource()
+    {
         AudioSourceManager newSource = Instantiate(audioSourcePrefab, this.transform);
         sources.Add(newSource);
         return newSource;
     }
 
-    public class Parameters{
+    public class Parameters
+    {
         public ClipData data;
         public float timer = 0f;
         public bool usePos = false;
         public Vector2 pos = default;
 
-        public Parameters(ClipData data){
+        public Parameters(ClipData data)
+        {
             this.data = data;
         }
     }

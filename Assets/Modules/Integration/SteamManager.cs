@@ -4,18 +4,19 @@ using System.Data.Common;
 
 public class SteamManager : MonoBehaviour
 {
+#if !UNITY_WEBGL || UNITY_EDITOR
     public static SteamManager instance;
     
     private bool logged = false;
 
     private void Awake(){
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         if(Res.data.editorPreferences.disableSteam){
             Destroy(gameObject);
             return;
         }
-        #endif
+#endif
 
         if(instance != null){
             Destroy(gameObject);
@@ -68,4 +69,5 @@ public class SteamManager : MonoBehaviour
     private Steamworks.Data.Achievement GetAchievement(string id){
         return new Steamworks.Data.Achievement(id);
     }
+#endif
 }

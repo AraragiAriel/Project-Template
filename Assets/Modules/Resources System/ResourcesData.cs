@@ -18,6 +18,7 @@ public class ResourcesData : ScriptableObject
     public ColorTagsData colorTags;
     public LocalizationData localizationData;
     public TmpAnimationsData tmpAnimationsData;
+    public EnumsData enumsData;
 
     [Header("Prefabs")]
     public AudioSourceManager audioSourcePrefab;
@@ -30,6 +31,8 @@ public class ResourcesData : ScriptableObject
     public ConfirmationBox confirmationBox;
 
     [Header("Tooltips")]
+    public Tooltip simpleTooltip;
+    public Tooltip statTooltip;
 
 #if UNITY_EDITOR
     [Header("Editor")]

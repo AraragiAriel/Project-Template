@@ -1,18 +1,18 @@
 using UnityEngine;
 using TMPro;
 using System;
-using UnityEngine.UI;
 using DG.Tweening;
-
 
 public class ConfirmationBox : MonoBehaviour
 {
-    public struct Parameters{
+    public struct Parameters
+    {
         public string description;
         public Action actionIfTrue;
         public Action actionIfFalse;
 
-        public Parameters(string description, Action actionIfTrue, Action actionIfFalse = null){
+        public Parameters(string description, Action actionIfTrue, Action actionIfFalse = null)
+        {
             this.description = description;
             this.actionIfTrue = actionIfTrue;
             this.actionIfFalse = actionIfFalse;
@@ -32,7 +32,7 @@ public class ConfirmationBox : MonoBehaviour
 
     public void SetBox(Parameters parameters)
     {
-        description.text = parameters.description.Parse();
+        description.Set(parameters.description);
         actionIfTrue = parameters.actionIfTrue;
         actionIfFalse = parameters.actionIfFalse;
 

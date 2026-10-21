@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2280465429711814465}
   - component: {fileID: 7427752195947255425}
   - component: {fileID: 2178968461788305716}
+  - component: {fileID: 4751122037500091962}
   - component: {fileID: 4005710285663819877}
   - component: {fileID: 3289233868573845556}
   - component: {fileID: 7950414697224510092}
@@ -126,6 +127,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4751122037500091962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4029825659386442318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb855378687469e458345e786543a5d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonManager
 --- !u!114 &4005710285663819877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,22 +154,29 @@ MonoBehaviour:
   onSelectClip: {fileID: 11400000, guid: 283e9b4b8334c164592815748e4f11a0, type: 2}
   onDeselectClip: {fileID: 11400000, guid: 2e6ba6c0e2ddd67459f5ca6313855bbb, type: 2}
   onClickClip: {fileID: 11400000, guid: a8797d1b18cdf6941b53ae2388256ab9, type: 2}
-  onSelect:
+  onMisclickClip: {fileID: 11400000, guid: 0f8f4ae4b8f02c242a9921b4ddf5f032, type: 2}
+  OnSelect:
     m_PersistentCalls:
       m_Calls: []
-  onDeselect:
+  OnDeselect:
     m_PersistentCalls:
       m_Calls: []
-  onLeftClick:
+  OnLeftClick:
     m_PersistentCalls:
       m_Calls: []
-  onRightClick:
+  OnRightClick:
     m_PersistentCalls:
       m_Calls: []
-  onMiddleClick:
+  OnMiddleClick:
     m_PersistentCalls:
       m_Calls: []
-  onAnyClick:
+  OnAnyClick:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDown:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUp:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &3289233868573845556
@@ -184,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e271784cce012d144aa9807148c72505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 3144357505162857356}
+  t: {fileID: 0}
   duration: 0.1
   height: 0
   scale: 1.1

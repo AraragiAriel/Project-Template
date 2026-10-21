@@ -8,7 +8,6 @@ public class BgmSourceManager : MonoBehaviour
     [SerializeField] private ClipData data;
     [SerializeField] private float fadeInDuration;
     [SerializeField] private float fadeOutDurationMult;
-    
     private AudioVolumeSetter volumeSetter;
     private AudioSource audioSource;
     private float currentFade = 0f;

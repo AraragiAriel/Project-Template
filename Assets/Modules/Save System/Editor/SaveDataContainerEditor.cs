@@ -1,33 +1,35 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(SaveDataContainer))]
-public class SaveSOEditor : Editor {
+public class SaveDataContainerEditor : Editor {
     public override void OnInspectorGUI(){
         base.OnInspectorGUI();
 
-        SaveDataContainer save = target as SaveDataContainer;
+        var save = (SaveDataContainer)target;
 
-        // SAVE SYSTEM
         EditorGUILayout.BeginHorizontal();
 
             float height = 40f;
-            if(GUILayout.Button("Save", GUILayout.Height(height))){
+            GUI.backgroundColor = Color.green;
+            if(GUILayout.Button("SAVE", GUILayout.Height(height)))
+            {
                 save.Save();
             }
-            if(GUILayout.Button("Reset", GUILayout.Height(height))){
-                save.data = new SaveData();
-                save.Save();
-            }
-            if(GUILayout.Button("Load", GUILayout.Height(height))){
+            GUI.backgroundColor = Color.blue;
+            if(GUILayout.Button("LOAD", GUILayout.Height(height)))
+            {
                 save.Load();
             }
-            if(GUILayout.Button("Delete", GUILayout.Height(height))){
-                save.Delete();
+            GUI.backgroundColor = Color.yellow;
+            if(GUILayout.Button("RESET", GUILayout.Height(height)))
+            {
                 save.data = new SaveData();
+            }
+            GUI.backgroundColor = Color.red;
+            if(GUILayout.Button("DELETE", GUILayout.Height(height)))
+            {
+                save.Delete();
             }
 
         EditorGUILayout.EndHorizontal();

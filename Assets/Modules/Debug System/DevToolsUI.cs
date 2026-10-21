@@ -18,7 +18,7 @@ public class DevToolsUI : MonoBehaviour
 
     public void Setup(List<DevTools.Slot> slots)
     {
-        Util.DestroyAllChildren(layout);
+        layout.DestroyAllChildren();
 
         foreach(var slot in slots)
         {

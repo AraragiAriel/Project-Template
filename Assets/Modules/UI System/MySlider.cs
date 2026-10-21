@@ -34,7 +34,11 @@ public class MySlider : MonoBehaviour
     private void SliderChange(float value)
     {
         value = Mathf.Lerp(range.x, range.y, value);
-        tmp.Set(percent ? Util.FormatPercent(value, false) : Util.Concat(value, false));
+        tmp.Set(value.Format(new()
+        {
+            percent = percent,
+            decimalDigits = 0,
+        }));
         OnValueChange?.Invoke(value);
     }
 }

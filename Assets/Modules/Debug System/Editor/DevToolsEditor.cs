@@ -34,5 +34,16 @@ public class DevToolsEditor : Editor
                 EditorUtility.SetDirty(script);
             }
         GUILayout.EndHorizontal();
+
+        if(GUILayout.Button("SET ALL\nTOOLS"))
+        {
+            var tools = Util.EnumList<DevTools.ToolType>();
+            while(script.slots.Count < tools.Count)
+                script.slots.Add(new DevTools.Slot());
+            foreach(int i in 0.To(tools.Count - 1, true))
+                script.slots[i].type = tools[i];
+
+            EditorUtility.SetDirty(script);
+        }
     }
 }

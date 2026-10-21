@@ -4,27 +4,28 @@ using UnityEditor;
 [CustomEditor(typeof(GameSettingsData), true)]
 public class GameSettingsDataEditor : Editor
 {
-    public override void OnInspectorGUI(){
+    void OnEnable()
+    {
+        GameSettingsManager.Load();
+    }
+
+    public override void OnInspectorGUI()
+    {
+        EditorGUI.BeginChangeCheck();
+
         base.OnInspectorGUI();
 
-        GUILayout.Space(16);
-
-        GUI.backgroundColor = Color.green;
-        if(GUILayout.Button("SAVE SETTINGS"))
+        if (EditorGUI.EndChangeCheck())
         {
             GameSettingsManager.Save();
         }
-        GUI.backgroundColor = Color.blue;
-        if(GUILayout.Button("LOAD SETTINGS"))
-        {
-            GameSettingsManager.Load();
-            EditorUtility.SetDirty(Res.data.gameSettingsData);
-        }
+
+        GUILayout.Space(16);
+
         GUI.backgroundColor = Color.red;
-        if(GUILayout.Button("CLEAR PLAYER PREFS"))
+        if(GUILayout.Button("Reset"))
         {
-            PlayerPrefs.DeleteAll();
-            PlayerPrefs.Save();
+            GameSettingsManager.Reset();
         }
     }
 }

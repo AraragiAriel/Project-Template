@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public class DevTools : MonoBehaviour
 {
@@ -26,10 +25,19 @@ public class DevTools : MonoBehaviour
 
     public void Use(ToolType type)
     {
-        // switch (type)
-        // {  
-        // }
+        try
+        {
+            // switch (type)
+            // {
+            // }
+        }
+        catch
+        {
+            Util.Debug("Couldn't use dev tool");
+        }
     }
+
+
 
     [System.Serializable]
     public class Slot

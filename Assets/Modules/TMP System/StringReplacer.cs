@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StringReplacer : MonoBehaviour
+public class StringReplacer
 {
     private Dictionary<string, string> placeholders = new();
     public void Add(string key, string value)

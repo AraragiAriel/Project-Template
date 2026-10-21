@@ -14,7 +14,8 @@ public class ClipDataEditor : Editor
     private ClipData _data;
     private ClipData data => _data??= target as ClipData;
 
-    public override void OnInspectorGUI(){
+    public override void OnInspectorGUI()
+    {
         serializedObject.Update();
 
         List<string> toOmit = new();
@@ -32,10 +33,24 @@ public class ClipDataEditor : Editor
         GUILayout.Space(32);
 
         times = EditorGUILayout.IntSlider("Times", times, 1, 10);
-        if(GUILayout.Button("Preview")){
+        if(GUILayout.Button("Preview"))
+        {
             foreach(int _ in 1.To(times))
                 EditorCoroutineUtility.StartCoroutineOwnerless(PreviewCo());         
         }
+
+        bool check = EditorUtil.AssetsList<ClipDataCheck>("Audio")[0].Check(data);
+        var oldColor = GUI.backgroundColor;
+
+        // CHECK LABEL
+        GUILayout.Space(32);
+        var style = new GUIStyle(EditorStyles.helpBox);
+        style.normal.textColor = Color.white;
+        style.fixedHeight = 48;
+        style.alignment = TextAnchor.MiddleCenter;
+        GUI.backgroundColor = check ? Color.green : Color.red;
+        EditorGUILayout.LabelField(check ? "IMPLEMENTADO" : "NÃO IMPLEMENTADO", style);
+        GUI.backgroundColor = oldColor;
 
         foreach(var source in sources)
             if(source != null && !source.isPlaying)
@@ -43,7 +58,8 @@ public class ClipDataEditor : Editor
         sources.TrimNull();
     }
 
-    private IEnumerator PreviewCo(){
+    private IEnumerator PreviewCo()
+    {
         yield return new EditorWaitForSeconds(data.delay);
 
         var obj = new GameObject();

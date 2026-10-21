@@ -1,17 +1,17 @@
 using TMPro;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Rainbow Data", menuName = "ScriptableObject/TMP Animations/Rainbow")]
+[CreateAssetMenu(fileName = "Rainbow Data", menuName = "ScriptableObject/UI/TMP Animations/Rainbow")]
 public class TmpColorRainbowAnimation : TmpAnimation
 {
     [Header("Colors")]
-    [SerializeField] [Range(0f, 1f)] private float saturation = .8f;
-    [SerializeField] [Range(0f, 1f)] private float value = 1f;
-    [SerializeField] private float speed = .6f;
-    [SerializeField] private float sparse = .02f;
-    [SerializeField] private bool perLetter = true;
+    [SerializeField] [Range(0f, 1f)] private float saturation;
+    [SerializeField] [Range(0f, 1f)] private float value;
+    [SerializeField] private float speed;
+    [SerializeField] private float sparse;
+    [SerializeField] private bool perLetter;
 
-    protected override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
+    public override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
     {
         int vertexId = c.vertexIndex;
         int materialId = c.materialReferenceIndex;

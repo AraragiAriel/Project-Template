@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
+[RequireComponent(typeof(ButtonManager))]
 public class ButtonEnabler : MonoBehaviour
 {
     private List<RID> rids = new();
 
-    private Button _button;
-    private Button button => _button ??= GetComponent<Button>();
+    private ButtonManager _button;
+    private ButtonManager button => _button ??= GetComponent<ButtonManager>();
 
     public void AddUnit(RID rid)
     {

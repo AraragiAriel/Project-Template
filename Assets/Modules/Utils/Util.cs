@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System;
-
+using UnityEngine.EventSystems;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,47 +15,20 @@ public static class Util
     public const int halfInspectorSpace = 8;
     public const int defaultInspectorSpace = 16;
 
-    public static void Debug(string s){
-        UnityEngine.Debug.Log($"{s} | ({UnityEngine.Random.Range(1,1000)})");
-    }
+    public static void Debug(string s)
+        => UnityEngine.Debug.Log($"{s}\n\n[{UnityEngine.Random.Range(1,1000)}]");
 
-    public static Vector2 AngleToVector(float angle){
+    public static Vector2 AngleToVector(float angle)
+    {
         return new Vector2(Mathf.Cos(Mathf.Deg2Rad*angle), Mathf.Sin(Mathf.Deg2Rad*angle));
     }
     
-    public static float Round(float value, float multipleOf){
+    public static float Round(float value, float multipleOf)
+    {
         value /= multipleOf;
         value = Mathf.Round(value);
         value *= multipleOf;
         return value; 
-    }
-
-    public static void Destroy(UnityEngine.Object obj)
-    {
-        if(obj is GameObject && (obj as GameObject).TryGetComponent(out DontClear _))
-            return;
-
-        #if UNITY_EDITOR
-            if(!EditorApplication.isPlaying)
-                UnityEditor.Undo.DestroyObjectImmediate(obj);
-            else
-                GameObject.Destroy(obj);
-        #else
-            GameObject.Destroy(obj);
-        #endif
-    }
-
-    public static void DestroyAll(List<UnityEngine.Object> objects)
-    {
-        int count = objects.Count;
-        for(int i = count - 1; i >= 0; i--)
-            Destroy(objects[i]);
-    }
-    
-    public static void DestroyAllChildren(Transform t)
-    {
-        for(int i = t.childCount - 1; i >= 0; i--)
-            Destroy(t.GetChild(i).gameObject);
     }
     
     public static Vector2 RotateVector2(Vector2 original, float angle){
@@ -93,16 +66,14 @@ public static class Util
         return toDrop;
     }
 
-    public static List<T> EnumList<T>() where T : System.Enum
+    public static List<T> EnumList<T>() where T : Enum
     {
-        var list = System.Enum.GetValues(typeof(T)).Cast<T>().ToList();
-        foreach(var i in (list.Count - 1).To(0))
+        var list = Enum.GetValues(typeof(T)).Cast<T>().ToList();
+        foreach(var i in (list.Count - 1).To(0, backwards: true))
         {
             var field = typeof(T).GetField(list[i].ToString());
             if(field != null && Attribute.GetCustomAttribute(field, typeof(EnumSkipAttribute)) != null)
-            {
                 list.RemoveAt(i);
-            }
         }
         return list;
     }
@@ -126,167 +97,26 @@ public static class Util
         return times % 2 == 0 ? remainder : 1f - remainder;
     }
 
-    #region FORMATTING
-
-    public static string Concat(float value, bool allowDecimal = true, int digits = 3, bool round = true){
-        if(digits < 1)
-            return "0";
-
-        value = SetDigits(value, digits, round);
-        string format = "0.##";
-
-        string[] suffixes = {"", "K", "M", "B", "T"};
-        int suffixId = 0;
-
-        float abs = Mathf.Abs(value);
-        while(abs >= 1000f && suffixId < suffixes.Length - 1){
-            abs /= 1000;
-            suffixId++;
-        }
-
-        if(suffixId == 0 && !allowDecimal){
-            if(!round)
-                abs = Mathf.Floor(abs);
-            format = "F0";
-        }
-
-
-        float result = Mathf.Sign(value)*abs;
-        return result.ToString(format, CultureInfo.InvariantCulture) + suffixes[suffixId];
-    }
-
-    public static float SetDigits(float value, int digits, bool round = true){
-        if(value == 0)
-            return 0f;
-
-        int power = Mathf.FloorToInt(Mathf.Log10(Mathf.Abs(value)));
-        float scale = Mathf.Pow(10, digits - 1 - power);
-        float truncated;
-        if(round)
-            truncated = Mathf.Round(value*scale)/scale;
-        else
-            truncated = Mathf.Floor(value*scale)/scale;
-
-        return truncated;
-    }
-
-    public static string FormatPercent(float value, bool allowDecimal = true)
-        => $"{Concat(value*100, allowDecimal).ToString(CultureInfo.InvariantCulture)}%";
-
-    public static string ExposeSign(float value, bool addSpace = false){
-        string s = "";
-        s += value > 0f || Mathf.Approximately(value, 0f) ? "+" : "-";
-        if(addSpace)
-            s += " ";
-        s += Mathf.Abs(value).ToString(CultureInfo.InvariantCulture);
-        return s;
-    }
-
-    #endregion
-
-    #region RANDOM
-
-    public static Vector2 RandDir(float from, float to)
+    public static void DeselectPointerHandler(GameObject obj)
     {
-        float angle = UnityEngine.Random.Range(from, to)*Mathf.Deg2Rad;
-        return new Vector2(
-            Mathf.Cos(angle),
-            Mathf.Sin(angle)
-        );  
-    }
-    public static Vector2 randDir => RandDir(0f, 360f);
-    public static Vector2 randPos => randDir*UnityEngine.Random.Range(0f, 1f);
-    public static int randSign => UnityEngine.Random.Range(0, 2) == 0 ?  1 : -1;
-    public static bool randBool => ChanceCheck(.5f);
-    public static bool ChanceCheck(float chance) => UnityEngine.Random.Range(0f, 1f) <= chance;
-    public static float RandMult(float range) => UnityEngine.Random.Range(1f - range, 1f + range);
-    public static float randMult => RandMult(.15f);
-    public static float RandSignedMult(float range) => randSign*RandMult(range);
-    public static float randSignedMult => randSign*randMult;
-    public static int DrawWeightedIndex(List<float> chances){
-        float sum = chances.Sum();
-        if(sum <= 0f){
-            UnityEngine.Debug.LogWarning("Total weighted chances not positive");
-            return 0;
-        }
-
-        float partial = 0f;
-        float rand = UnityEngine.Random.Range(0f, sum);
-        foreach(int i in 0.To(chances.Count - 1)){
-            partial += chances[i];
-            if(partial >= rand)
-                return i;
-        }
-        UnityEngine.Debug.LogWarning("Couldn't draw position");
-        return 0;
-    }
-
-    #endregion
-
-    #region DATA TYPE
-
-    public class BiDictionary<T1, T2> : IEnumerable<KeyValuePair<T1, T2>>{
-        private Dictionary<T1, T2> forward = new();
-        private Dictionary<T2, T1> backward = new();
-
-        public BiDictionary(){}
-
-        public void Add(T1 key, T2 value){
-            forward.Add(key, value);
-            backward.Add(value, key);
-        }
-
-        public T2 Get(T1 key) => forward[key];
-        public T1 Get(T2 key) => backward[key];
-
-        public bool TryGet(T1 key, out T2 value) => forward.TryGetValue(key, out value);
-        public bool TryGet(T2 key, out T1 value) => backward.TryGetValue(key, out value);
-
-        public bool Remove(T1 key){
-            if(forward.TryGetValue(key, out T2 val)){
-                forward.Remove(key);
-                backward.Remove(val);
-                return true;
-            }
-            return false;
-        }
-
-        public bool Remove(T2 value){
-            if(backward.TryGetValue(value, out T1 key)){
-                backward.Remove(value);
-                forward.Remove(key);
-                return true;
-            }
-            return false;
-        }   
-        public IEnumerator<KeyValuePair<T1, T2>> GetEnumerator() => forward.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-    }
-
-    [System.Serializable]
-    public class WeightedList<T>{
-        [System.Serializable]
-        public class Item<T1>{
-            public T1 obj;
-            public float weight;
-        }
-        public List<Item<T>> items;
-
-        public T Draw(){
-            int id = DrawWeightedIndex(items.Select(i => i.weight).ToList());
-            return items[id].obj;
-        }
-
-        public WeightedList(){}
-
-        public WeightedList(WeightedList<T> list){
-            items = new(list.items);
+        var handlers = obj.GetComponentsInChildren<IPointerExitHandler>();
+        foreach(var handler in handlers)
+        {
+            handler.OnPointerExit(new(EventSystem.current));
         }
     }
 
-    #endregion
+    public static void SelectPointerHandler(GameObject obj)
+    {
+        var handlers = obj.GetComponentsInChildren<IPointerEnterHandler>();
+        foreach(var handler in handlers)
+        {
+            handler.OnPointerEnter(new(EventSystem.current));
+        }
+    }
 
-    #region GAME SPECIFIC
+#region GAME SPECIFIC
 
-    #endregion
+#endregion
+
 }

@@ -44,7 +44,7 @@ public class SmoothCounter : MonoBehaviour
                 diffText.Set(
                     _variation == 0 ?
                         "" :
-                        Util.ExposeSign(_variation)
+                        _variation.Format(new(){plusSign = true})
                 );
         }
     }

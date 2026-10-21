@@ -7,9 +7,11 @@ using UnityEngine.EventSystems;
 
 public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    [SerializeField] private GameObject tooltipGameObj;
+    [SerializeField] private List<Vector2> preferredDirs = new();
     private List<Tooltip> tooltips = new();
     private ITooltip iTooltip;
-    private const int stop = 10;
+    private const int limit = 10;
 
     private RectTransform _rect;
     private RectTransform rect => _rect ??= GetComponent<RectTransform>();
@@ -21,7 +23,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private void Awake()
     {
-        iTooltip = GetComponent<ITooltip>();
+        iTooltip = tooltipGameObj == null ? GetComponent<ITooltip>() : tooltipGameObj.GetComponent<ITooltip>();
         if(iTooltip == null){
             enabled = false;
             return;
@@ -48,12 +50,13 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     }
 
     private void Select(ITooltip iTooltip){
-        if(activeRects.Count - 1 >= stop)
+        if(activeRects.Count - 1 >= limit)
             return;
 
         try
         {
             var data = iTooltip.TooltipData();
+            data.preferredDirs = preferredDirs;
             var tooltip = Instantiate(data.prefab);
 
             data.rects = activeRects;
@@ -76,7 +79,8 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             tooltip.SetPosition();
     }
 
-    private void Deselect(){
+    private void Deselect()
+    {
         if(tooltips.Count == 0) return;
 
         foreach(int i in (tooltips.Count - 1).To(0))
@@ -88,18 +92,22 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         tooltips.Clear();
     }
 
-    private void OnDestroy(){
+    private void OnDestroy()
+    {
         Deselect();
     }
 }
 
-public class TooltipData{
+public class TooltipData
+{
     public Tooltip prefab;
     public List<RectTransform> rects = new();
     public List<ITooltip> subTooltips = new();
+    public List<Vector2> preferredDirs = new();
     public StringReplacer replacer = new();
 }
 
-public interface ITooltip{
+public interface ITooltip
+{
     public TooltipData TooltipData();
 }

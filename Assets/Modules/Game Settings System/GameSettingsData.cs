@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
@@ -9,12 +8,13 @@ public class GameSettingsData : ScriptableObject
     public GameLanguage language = GameLanguage.English;
 
     [Header("Audio Volume")]
-    [Range(0f, 1f)] public float bgmVolume = 1f;
-    [Range(0f, 1f)] public float sfxVolume = 1f;
+    [Range(0f, 1f)] public float masterVolume = 1f;
+    [Range(0f, 1f)] public float bgmVolume    = 1f;
+    [Range(0f, 1f)] public float sfxVolume    = 1f;
 
     [Header("Screen Size")]
     public bool fullscreen = true;
-    public bool nativeResolution;
+    public bool nativeResolution = true;
     public ScreenSize selectedScreenSize = 0;
 
     [Header("FPS")]

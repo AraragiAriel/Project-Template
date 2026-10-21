@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
 
+[CanEditMultipleObjects]
 [CustomEditor(typeof(ButtonStyler), true)]
 public class ButtonStylerEditor : Editor
 {

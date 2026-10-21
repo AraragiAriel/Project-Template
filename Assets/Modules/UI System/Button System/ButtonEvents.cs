@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
+[RequireComponent(typeof(ButtonManager))]
 public class ButtonEvents : MonoBehaviour,
     IPointerEnterHandler,
     IPointerExitHandler,
@@ -27,14 +28,10 @@ public class ButtonEvents : MonoBehaviour,
     public UnityEvent OnDown;
     public UnityEvent OnUp;
 
-    public bool interactable
-    {
-        get => button.interactable;
-        set => button.interactable = value;
-    }
+    private ButtonManager _manager;
+    private ButtonManager manager => _manager ??= GetComponent<ButtonManager>();
 
-    private Button _button;
-    private Button button => _button ??= GetComponent<Button>();
+    public bool interactable => manager.interactable;
 
     public void OnPointerEnter(PointerEventData eventData)
     {

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class DiscordManager : MonoBehaviour
 {
+#if !UNITY_WEBGL || UNITY_EDITOR
     private static DiscordManager instance;
     
     private Discord.Discord discord;
@@ -10,12 +11,12 @@ public class DiscordManager : MonoBehaviour
 
     private void Awake(){
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         if(Res.data.editorPreferences.disableDiscord){
             Destroy(gameObject);
             return;
         }
-        #endif
+#endif
 
         if(instance != null){
             Destroy(this.gameObject);
@@ -73,4 +74,5 @@ public class DiscordManager : MonoBehaviour
             Debug.LogWarning("Discord activity error: " + e.Message);
         }
     }
+#endif
 }

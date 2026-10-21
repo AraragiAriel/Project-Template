@@ -5,6 +5,19 @@ using System.Linq;
 
 public static class EditorUtil
 {
+    public static void DrawLabel(string label, Color bgColor, int fontSize = 12)
+    {
+        GUIStyle style = new();
+        style.normal.textColor = Res.data.colorTags.GetContrast(bgColor);
+        style.fontSize = fontSize;
+
+        Vector2 size = style.CalcSize(new GUIContent(label));
+        Rect rect = GUILayoutUtility.GetRect(size.x, size.y);
+        EditorGUI.DrawRect(rect, bgColor);
+
+        EditorGUI.LabelField(rect, label, style);
+    }
+
     public static void DrawLabel(string label, Color bgColor, Color textColor, int fontSize = 12)
     {
         GUIStyle style = new();
@@ -34,13 +47,23 @@ public static class EditorUtil
                     GUILayout.BeginHorizontal();
                 } 
                 var texture = AssetPreview.GetAssetPreview(sprites[i]);
+                texture.filterMode = FilterMode.Point;
                 string tooltip = "";
                 try
                 {
                     tooltip = tooltips[i];
                 } catch {}
                 var content = new GUIContent(texture, tooltip);
-                GUILayout.Label(content, GUILayout.Width(dimension), GUILayout.Height(dimension));
+                // GUILayout.Label(content, GUILayout.Width(dimension), GUILayout.Height(dimension));
+                // GUILayout.Box(texture, GUILayout.Width(dimension), GUILayout.Height(dimension));
+                Rect rect = GUILayoutUtility.GetRect(dimension, dimension);
+                GUI.DrawTexture(
+                    rect,
+                    texture,
+                    ScaleMode.ScaleToFit,
+                    true
+                );
+
                 counter++;
             }
         GUILayout.EndHorizontal();

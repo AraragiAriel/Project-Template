@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 855251859}
+    - target: {fileID: 2802239108950121294, guid: c2ab98c7e0c825345a11c1b60ef0137f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -19
+      objectReference: {fileID: 0}
     - target: {fileID: 3781292696711874042, guid: c2ab98c7e0c825345a11c1b60ef0137f, type: 3}
       propertyPath: m_Name
       value: SINGLETONS - GLOBAL
@@ -173,6 +177,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6737393793340565339, guid: c2ab98c7e0c825345a11c1b60ef0137f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7911602531792551701, guid: c2ab98c7e0c825345a11c1b60ef0137f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7911602531792551701, guid: c2ab98c7e0c825345a11c1b60ef0137f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7911602531792551701, guid: c2ab98c7e0c825345a11c1b60ef0137f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7911602531792551701, guid: c2ab98c7e0c825345a11c1b60ef0137f, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

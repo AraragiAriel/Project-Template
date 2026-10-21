@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "Button Style Data", menuName = "ScriptableObject/Button Style Data")]
+[CreateAssetMenu(fileName = "Button Style Data", menuName = "ScriptableObject/UI/Button Style Data")]
 public class ButtonStyleData : ScriptableObject
 {
     public Sprite sprite;

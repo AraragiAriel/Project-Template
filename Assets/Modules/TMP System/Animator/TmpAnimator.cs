@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(TMP_Text))]
 public class TmpAnimator : MonoBehaviour
@@ -19,19 +18,20 @@ public class TmpAnimator : MonoBehaviour
     private Coroutine updateCo;
     private Dictionary<TmpAnimation, List<TMP_CharacterInfo>> toAnimate = new();
 
-    void Awake()
-    {
-        PreRenderText(null);
-    }
-
     void OnEnable()
     {
         text.OnPreRenderText += PreRenderText;
+        PreRenderText(null);
     }
 
     void OnDisable()
     {
         text.OnPreRenderText -= PreRenderText;
+        if(updateCo != null)
+        {
+            StopCoroutine(updateCo);
+            updateCo = null;
+        }
     }
 
     private void PreRenderText(TMP_TextInfo _)
@@ -47,15 +47,17 @@ public class TmpAnimator : MonoBehaviour
         }
 
         baseVertices.Clear();
+        toAnimate.Clear();
+
         foreach(var mesh in text.textInfo.meshInfo)
         {
-            int length = mesh.vertices.Length;
+            int length = mesh.vertices == null ? 0 : mesh.vertices.Length;
             Vector3[] array = new Vector3[length];
-            Array.Copy(mesh.vertices, array, length);
+            if(mesh.vertices != null)
+                Array.Copy(mesh.vertices, array, length);
             baseVertices.Add(array);
         }
 
-        toAnimate.Clear();
         foreach(var link in info.linkInfo)
         {
             foreach(var id in link.GetLinkID().Split(','))
@@ -63,8 +65,9 @@ public class TmpAnimator : MonoBehaviour
                 if(Res.data.tmpAnimationsData.dict.TryGetValue(id, out var anim))
                 {
                     List<TMP_CharacterInfo> newChars = new();
-                        foreach(int i in link.linkTextfirstCharacterIndex.To(link.linkTextfirstCharacterIndex + link.linkTextLength - 1))
-                            newChars.Add(info.characterInfo[i]);
+                    foreach(int i in link.linkTextfirstCharacterIndex.To(link.linkTextfirstCharacterIndex + link.linkTextLength - 1))
+                        newChars.Add(info.characterInfo[i]);
+
                     if(!toAnimate.ContainsKey(anim))
                         toAnimate.Add(anim, newChars);
                     else
@@ -80,13 +83,16 @@ public class TmpAnimator : MonoBehaviour
     {
         while (true)
         {
-            foreach(var key in toAnimate.Keys)
+            if(info.characterCount == 0)
             {
-                foreach(var c in toAnimate[key])
-                {
-                    key.Animate(c, this);
-                }
+                yield return null;
+                continue;
             }
+
+            foreach(var key in toAnimate.Keys)
+                foreach(var c in toAnimate[key])
+                    if(c.isVisible)
+                        key.AnimateCharacter(c, this);
 
             foreach(int i in 0.To(info.meshInfo.Length - 1))
             {

@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Wave Data", menuName = "ScriptableObject/TMP Animations/Wave")]
+[CreateAssetMenu(fileName = "Wave Data", menuName = "ScriptableObject/UI/TMP Animations/Wave")]
 public class TmpWaveAnimation : TmpAnimation
 {
     [Header("Fluctuate")]
@@ -9,7 +9,7 @@ public class TmpWaveAnimation : TmpAnimation
     [SerializeField] private float height = 1f;
     [SerializeField] private float sparse = .05f;
 
-    protected override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
+    public override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
     {
         int vertexId = c.vertexIndex;
         int materialId = c.materialReferenceIndex;

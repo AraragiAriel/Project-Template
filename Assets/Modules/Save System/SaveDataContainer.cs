@@ -9,12 +9,18 @@ public class SaveDataContainer : ScriptableObject
     public string saveName;
     public SaveData data;
 
-    public void Create(){
+    public void Create()
+    {
         data = new SaveData();
         Save();
     }
 
-    public void Save(){
+    public void Save()
+    {
+#if UNITY_EDITOR
+        if(Res.data.editorPreferences.disableSave && Application.isPlaying)
+            return;
+#endif
         var context = new SerializationContext();
         context.Config.SerializationPolicy = SerializationPolicies.Unity;
         context.StringReferenceResolver = new UIDAssetReferenceResolver();
@@ -28,9 +34,11 @@ public class SaveDataContainer : ScriptableObject
             File.Move(tempPath, path);
     }
 
-    public void Load(){
-        if(!File.Exists(path) && !File.Exists(backupPath)){
-            data = new SaveData();
+    public void Load()
+    {
+        if(!File.Exists(path) && !File.Exists(backupPath))
+        {
+            Create();
             return;
         }
 
@@ -39,7 +47,8 @@ public class SaveDataContainer : ScriptableObject
                 Debug.LogError("Couldn't load save file");
     }
 
-    private bool Read(string path){
+    private bool Read(string path)
+    {
         try{
             var context = new DeserializationContext();
             context.Config.SerializationPolicy = SerializationPolicies.Unity;
@@ -47,12 +56,15 @@ public class SaveDataContainer : ScriptableObject
             byte[] bytes = File.ReadAllBytes(path);
             data = SerializationUtility.DeserializeValue<SaveData>(bytes, DataFormat.Binary, context);
             return true;
-        } catch {
+        }
+        catch
+        {
             return false;
         }
     }
 
-    public void Delete(){
+    public void Delete()
+    {
         if(File.Exists(path))
             File.Delete(path); 
         if(File.Exists(backupPath))
@@ -62,17 +74,18 @@ public class SaveDataContainer : ScriptableObject
     public bool exists => File.Exists(path) || File.Exists(backupPath);
     public string path => PathFolder() + "/" + saveName + ".save";
     public static string persistentPath => Application.persistentDataPath;
-    # if UNITY_EDITOR
+# if UNITY_EDITOR
     public static string editorPath = StaticData.customFolder + "/Dev Saves";
-    #endif
+#endif
     public string tempPath => path + ".tmp";
     public string backupPath => path + ".backup";
 
-    public string PathFolder(){
-        # if UNITY_EDITOR
+    public string PathFolder()
+    {
+# if UNITY_EDITOR
         return editorPath;
-        # else
+# else
         return persistentPath;
-        # endif
+# endif
     }
 }

@@ -2,23 +2,27 @@ using UnityEngine;
 using UnityEditor;
 using System.Linq;
 using UnityEngine.UI;
+using System;
 
 public static class EditorTools
 {
     #region FOLDERS
 
     [MenuItem("Tools/AraragiAriel/Folders/Project Folder")]
-    private static void OpenProjectFolder(){
+    private static void OpenProjectFolder()
+    {
         Application.OpenURL(StaticData.projectFolder);
     }
 
     [MenuItem("Tools/AraragiAriel/Folders/Custom Folder")]
-    private static void OpenCustomFolder(){
+    private static void OpenCustomFolder()
+    {
         Application.OpenURL(StaticData.customFolder);
     }
 
     [MenuItem("Tools/AraragiAriel/Folders/Persistent Save Path")]
-    private static void OpenPersistentSavePath(){
+    private static void OpenPersistentSavePath()
+    {
         Application.OpenURL(SaveDataContainer.persistentPath);
     }
 
@@ -27,11 +31,39 @@ public static class EditorTools
     #region SETTERS
 
     [MenuItem("Tools/AraragiAriel/Global Set")]
-    private static void GlobalSet(){
+    private static void GlobalSet()
+    {
+        SetDataList();
         SetStats();
         SetUIDs();
         SetLocalization();
         SetColors();
+    }
+
+    public static void SetDataList()
+    {
+        string path = "Assets";
+        string filter = "t:ScriptableObject";
+
+        string[] assetGuids = AssetDatabase.FindAssets(filter, new[] {path});
+        var objs = assetGuids
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Select(AssetDatabase.LoadAssetAtPath<ScriptableObject>)
+            .Where(asset => asset != null)
+            .ToList();
+
+        foreach(var obj in objs)
+        {
+            Type type = obj.GetType();
+            Type implementedInterface = type.GetInterfaces().FirstOrDefault(i =>
+                i.IsGenericType &&
+                i.GetGenericTypeDefinition() == typeof(IDataList<>));
+            if(implementedInterface != null)
+            {
+                var method = implementedInterface.GetMethod("Populate");
+                method.Invoke(obj, null);
+            }
+        }
     }
 
     private static void SetStats(){

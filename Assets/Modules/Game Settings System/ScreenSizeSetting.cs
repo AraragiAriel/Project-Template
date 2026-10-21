@@ -1,5 +1,3 @@
-using System;
-using Steamworks.Data;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Screen Size Setting", menuName = "ScriptableObject/Game Settings/Screen Size")]
@@ -11,8 +9,8 @@ public class ScreenSizeSetting : GameSetting
 
     public override void Load()
     {
-        data.fullscreen = PlayerPrefs.GetInt(fullscreen, 1) == 1;
-        data.nativeResolution = PlayerPrefs.GetInt(native, 1) == 1;
+        data.fullscreen = GameSettingsManager.GetBool(fullscreen, true);
+        data.nativeResolution = GameSettingsManager.GetBool(native, true);
         if (PlayerPrefs.HasKey(resolution))
         {
             // resolution present in player prefs

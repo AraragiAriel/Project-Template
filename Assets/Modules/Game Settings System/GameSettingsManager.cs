@@ -1,11 +1,11 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public static class GameSettingsManager
 {
     private static List<GameSetting> settings => Res.data.gameSettings;
+
+    public static bool GetBool(string id, bool fallBack) => PlayerPrefs.GetInt(id, fallBack ? 1 : 0) == 1;
 
     public static void Initialize()
     {
@@ -35,5 +35,12 @@ public static class GameSettingsManager
             setting.Save();
 
         PlayerPrefs.Save();
+    }
+
+    public static void Reset()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+        Load();
     }
 }

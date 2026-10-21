@@ -1,17 +1,17 @@
 using TMPro;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Color Bounce Data", menuName = "ScriptableObject/TMP Animations/Color Bounce")]
+[CreateAssetMenu(fileName = "Color Bounce Data", menuName = "ScriptableObject/UI/TMP Animations/Color Bounce")]
 public class TmpColorBounceAnimation : TmpAnimation
 {
     [Header("Colors")]
-    [SerializeField] private Color color1 = Color.blue;
-    [SerializeField] private Color color2 = Color.red;
-    [SerializeField] private float speed = 1f;
-    [SerializeField] private float sparse = .1f;
-    [SerializeField] private bool perLetter = true;
+    [SerializeField] private Color color1;
+    [SerializeField] private Color color2;
+    [SerializeField] private float speed;
+    [SerializeField] private float sparse;
+    [SerializeField] private bool perLetter;
 
-    protected override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
+    public override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
     {
         int vertexId = c.vertexIndex;
         int materialId = c.materialReferenceIndex;

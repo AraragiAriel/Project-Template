@@ -12,6 +12,11 @@ public class VolumeSlider : MonoBehaviour
 
     private void OnEnable()
     {
+        float value =  bgm ? 
+            Res.data.gameSettingsData.bgmVolume :
+            Res.data.gameSettingsData.sfxVolume;
+        slider.value = value;
+
         slider.OnValueChange += SliderChange;
     }
 
@@ -20,17 +25,8 @@ public class VolumeSlider : MonoBehaviour
         slider.OnValueChange -= SliderChange;   
     }
 
-    private void Start()
-    {
-        float value =  bgm ? 
-            Res.data.gameSettingsData.bgmVolume :
-            Res.data.gameSettingsData.sfxVolume;
-        slider.value = value;
-    }
-
     private void SliderChange(float value)
     {
-        value = Util.SetDigits(value, 2, true);
         if(bgm)
             Res.data.gameSettingsData.bgmVolume = value;
         else

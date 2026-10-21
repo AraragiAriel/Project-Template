@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e8dc43e148c9e478cfe380baac6b34, type: 3}
+  m_Name: Clip Data Check
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::ClipDataCheck
+  uncheckeds: []
+  checkeds:
+  - data: {fileID: 11400000, guid: 283e9b4b8334c164592815748e4f11a0, type: 2}
+    check: 1
+  - data: {fileID: 11400000, guid: 2e6ba6c0e2ddd67459f5ca6313855bbb, type: 2}
+    check: 1
+  - data: {fileID: 11400000, guid: a8797d1b18cdf6941b53ae2388256ab9, type: 2}
+    check: 1
+  - data: {fileID: 11400000, guid: 0f8f4ae4b8f02c242a9921b4ddf5f032, type: 2}
+    check: 1

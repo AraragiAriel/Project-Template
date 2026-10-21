@@ -1,15 +1,15 @@
 using TMPro;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Wobble Data", menuName = "ScriptableObject/TMP Animations/Wobble")]
+[CreateAssetMenu(fileName = "Wobble Data", menuName = "ScriptableObject/UI/TMP Animations/Wobble")]
 public class TmpWobbleAnimation : TmpAnimation
 {
     [Header("Wobble")]
     [SerializeField] private float speed = 4f;
-    [SerializeField] private Vector2 dist = new(.2f, .2f);
+    [SerializeField] private Vector2 dist;
     [SerializeField] private float sparse = .05f;
 
-    protected override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
+    public override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
     {
         int vertexId = c.vertexIndex;
         int materialId = c.materialReferenceIndex;

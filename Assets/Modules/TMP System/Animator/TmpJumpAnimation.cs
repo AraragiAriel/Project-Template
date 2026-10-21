@@ -1,15 +1,15 @@
 using TMPro;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Jump Data", menuName = "ScriptableObject/TMP Animations/Jump")]
+[CreateAssetMenu(fileName = "Jump Data", menuName = "ScriptableObject/UI/TMP Animations/Jump")]
 public class TmpJumpAnimation : TmpAnimation
 {
     [Header("Fluctuate")]
-    [SerializeField] private float jumpDuration = .25f;
-    [SerializeField] private float jumpHeight = 1.5f;
-    [SerializeField] private int count = 4;
+    [SerializeField] private float jumpDuration;
+    [SerializeField] private float jumpHeight;
+    [SerializeField] private int count;
 
-    protected override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
+    public override void AnimateCharacter(TMP_CharacterInfo c, TmpAnimator animator)
     {
         int vertexId = c.vertexIndex;
         int materialId = c.materialReferenceIndex;

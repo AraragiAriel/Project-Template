@@ -8,6 +8,10 @@ public class LayoutAutoSpacing : MonoBehaviour
     [SerializeField] private float minSpacing = -100;
     [SerializeField] private float maxSpacing = 100;
 
+    [Header("Child Size")]
+    [SerializeField] private bool useNativeSize = true;
+    [SerializeField] private float overrideSize = 0f;
+
     private HorizontalOrVerticalLayoutGroup _layout;
     private HorizontalOrVerticalLayoutGroup layout => _layout??= GetComponent<HorizontalOrVerticalLayoutGroup>();
 
@@ -19,14 +23,17 @@ public class LayoutAutoSpacing : MonoBehaviour
     private void OnRectTransformDimensionsChange() => Recalculate();
 
 #if UNITY_EDITOR
-    void OnValidate(){
+    void OnValidate()
+    {
         Recalculate();
     }
 #endif
 
-    void Recalculate(){
+    void Recalculate()
+    {
         int count = transform.childCount;
-        if(count <= 1){
+        if(count <= 1)
+        {
             layout.spacing = 0;
             return;
         }
@@ -38,10 +45,13 @@ public class LayoutAutoSpacing : MonoBehaviour
             rect.rect.height - (layout.padding.top  + layout.padding.bottom);
 
         float childTotalSize = 0f;
-        foreach(RectTransform child in rect)
-            childTotalSize += horizontal ?
-                child.rect.width :
-                child.rect.height;
+        if(useNativeSize)
+            foreach(RectTransform child in rect)
+                childTotalSize += horizontal ?
+                    child.rect.width :
+                    child.rect.height;
+        else
+            childTotalSize += count*overrideSize;
 
         available -= childTotalSize;
         float spacing = available/(count - 1);

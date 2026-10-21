@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 // [CreateAssetMenu(fileName = "Color Tags Data", menuName = "ScriptableObject/Others/ColorTags")]
@@ -9,34 +10,65 @@ public class ColorTagsData : ScriptableObject
     public List<ScriptableObject> colors = new();
     public Dictionary<string, IColor> dict {get; private set;} = new();
 
-    public void Populate(){
+    public void Populate()
+    {
         dict.Clear();
-        foreach(var data in colors){
+        foreach(var data in colors)
+        {
             var color = data as IColor;
             if(color != null && !string.IsNullOrEmpty(color.GetColor().tag))
-                dict.Add(color.GetColor().tag, color);
+            {
+                var tag = color.GetColor().tag;
+                if(dict.ContainsKey(tag))
+                    Util.Debug($"color tag already added: object - {data.name} / tag - {tag}");
+                dict[tag] = color;
+            }
         }
     }
 
     public Color Get(string tag) => dict[tag].GetColor();
-
-    public Color GetContrast(Color color)
+    
+    public Color GetLight()
     {
         try
         {
-            return color.IsLight() ? Get("dark") : Get("light");
+            return Get("light");
         }
         catch
         {
-            return color.IsLight() ? Color.black : Color.white;
+            return Color.white;
+        }
+    }
+    
+    public Color GetDark()
+    {
+        try
+        {
+            return Get("dark");
+        }
+        catch
+        {
+            return Color.black;
         }
     }
 
-    public string Parse(string s){
-        foreach(var kvp in dict){
-            s = s.Replace($"<{kvp.Key}>", $"<color=#{ColorUtility.ToHtmlStringRGBA(kvp.Value.GetColor())}>");
-            s = s.Replace($"</{kvp.Key}>", $"</color>");
-        }
+    public Color GetContrast(Color color) => color.IsLight() ? GetDark() : GetLight();
+
+    private static readonly Regex MyColorTag = new
+    (
+        @"<myColor\s*=\s*(?<key>[^>]+?)\s*>",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase
+    );
+
+    public string Parse(string s)
+    {
+        s = MyColorTag.Replace(s, match =>
+        {
+            var key = match.Groups["key"].Value.Trim();
+
+            return $"<color=#{ColorUtility.ToHtmlStringRGBA(Get(key))}>";
+        });
+        s = s.Replace($"</myColor>", $"</color>");
         return s;
     }
 }
@@ -45,14 +77,20 @@ public class ColorAttribute : Attribute
 {
     public string key;
     
-    public ColorAttribute(string key){
+    public ColorAttribute(string key)
+    {
         this.key = key;
     }
 }
 
 public static class ColorAttributeExtension
 {
-    public static Color GetColor(this Enum value){
+    public static Color GetColor(this Enum value)
+    {
+        var enumData = Res.data.enumsData.Get<EnumData>(value);
+        if(enumData != null)
+            return enumData.GetColor();
+
         var member = value.GetType().GetMember(value.ToString())[0];
         var attr = member.GetCustomAttribute<ColorAttribute>();
         return attr != null ? Res.data.colorTags.Get(attr.key) : Color.white;

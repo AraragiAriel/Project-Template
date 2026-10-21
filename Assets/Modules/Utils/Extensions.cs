@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
+using System.Linq;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public static class Extensions
 {
 #region INT
 
-    public static IEnumerable<int> To(this int from, int to, bool forward = false){
+    public static IEnumerable<int> To(this int from, int to, bool forward = false, bool backwards = false)
+    {
         if(forward && from > to)
+            yield break;
+
+        if(backwards && from < to)
             yield break;
 
         int step = from <= to ? 1 : -1;
@@ -27,11 +35,45 @@ public static class Extensions
         return i + change;
     }
 
+    public static int Mod(this int f, int d)
+    {
+        int mod = f % d;
+        return mod >= 0f ? mod : mod + d;
+    }
+
 #endregion
 
 #region FLOAT
 
+    public static Vector2 AngleToVector(this float angle)
+        => new Vector2(Mathf.Cos(Mathf.Deg2Rad*angle), Mathf.Sin(Mathf.Deg2Rad*angle));
+        
+    public static float Mod(this float f, float d)
+    {
+        float mod = f % d;
+        return mod >= 0f ? mod : mod + d;
+    }
+
     public static string ToPercent(this float f) => (f*100).ToString() + "%";
+    
+    public static float ReScale(this float f, Vector2 oldScale, Vector2 newScale)
+    {
+        f = (f - oldScale.x)/oldScale.Range();
+        f = f*newScale.Range() + newScale.x;
+        return f;
+    }
+
+#endregion
+
+#region BOOL
+
+    public static float ToInt(this bool b) => b ? 1 : -1;
+
+#endregion
+
+#region VECTOR
+
+    public static float Range(this Vector2 vector) => vector.y - vector.x;
 
 #endregion
 
@@ -54,6 +96,15 @@ public static class Extensions
         
     public static string RemoveTags(this string s) => Regex.Replace(s, "<.*?>", string.Empty);
 
+    public static string RemoveColorTags(this string s)
+    => Regex.Replace
+    (
+        s,
+        @"</?(?:color|myColor)(?:\s*=[^>]*)?>",
+        string.Empty,
+        RegexOptions.IgnoreCase
+    );
+
 #endregion
 
 #region LIST
@@ -70,11 +121,10 @@ public static class Extensions
         return list[UnityEngine.Random.Range(0, list.Count)];
     }
 
-    public static void TrimNull<T>(this IList<T> list){
-        for(int i = list.Count - 1; i >= 0; i--)
-            if(list[i] == null)
-                list.RemoveAt(i);
-    }
+    public static bool TrimNull<T>(this List<T> list) => list.RemoveAll(
+        i => i == null ||
+        (i is Object obj && !obj)
+    ) > 0;
 
     public static void RemoveRand<T>(this IList<T> list){
         list.RemoveAt(Random.Range(0, list.Count));
@@ -85,6 +135,21 @@ public static class Extensions
             list.RemoveRand();
     }
 
+    public static T GetOrLast<T>(this IList<T> list, int n)
+    {
+        if(n < list.Count)
+            return list[n];
+            
+        return list.Last();
+    }
+    
+    public static void DestroyAll(this List<Object> objects)
+    {
+        int count = objects.Count;
+        for(int i = count - 1; i >= 0; i--)
+            objects[i].Destroy();
+    }
+
     public static T PopFirst<T>(this IList<T> list) => list.Pop(0);
     public static T PopLast<T>(this IList<T> list) => list.Pop(list.Count - 1);
     public static T PopRand<T>(this IList<T> list) => list.Pop(Random.Range(0, list.Count - 1));
@@ -92,6 +157,22 @@ public static class Extensions
         T t = list[n];
         list.Remove(t);
         return t;
+    }
+
+#endregion
+
+#region COMPONENT
+
+    public static bool TryGetComponentInChildren<T>(this Component component, out T output) where T : Component
+    {
+        output = component.GetComponentInChildren<T>();
+        return output != null;
+    }
+
+    public static bool TryGetComponentInParent<T>(this Component component, out T output) where T : Component
+    {
+        output = component.GetComponentInParent<T>();
+        return output != null;
     }
 
 #endregion
@@ -149,7 +230,8 @@ public static class Extensions
 
 #region OTHERS
 
-    public static Rect GetScreenRect(this RectTransform rt){
+    public static Rect GetScreenRect(this RectTransform rt)
+    {
         Vector3[] corners = new Vector3[4];
         rt.GetWorldCorners(corners);
 
@@ -193,6 +275,27 @@ public static class Extensions
             yield return r;
             remaining--;
         }
+    }
+    
+    public static void Destroy(this UnityEngine.Object obj)
+    {
+        if(obj is GameObject && (obj as GameObject).TryGetComponent(out DontClear _))
+            return;
+
+        #if UNITY_EDITOR
+            if(!EditorApplication.isPlaying)
+                UnityEditor.Undo.DestroyObjectImmediate(obj);
+            else
+                GameObject.Destroy(obj);
+        #else
+            GameObject.Destroy(obj);
+        #endif
+    }
+
+    public static void DestroyAllChildren(this Transform t)
+    {
+        for(int i = t.childCount - 1; i >= 0; i--)
+            t.GetChild(i).gameObject.Destroy();
     }
 
 #endregion

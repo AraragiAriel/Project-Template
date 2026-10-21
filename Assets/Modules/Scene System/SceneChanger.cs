@@ -19,7 +19,7 @@ public class SceneChanger : MonoBehaviour
 {
     // STATIC
 
-    public static readonly Util.BiDictionary<SceneType, string> scenesDict = new Util.BiDictionary<SceneType, string>
+    public static readonly BiDictionary<SceneType, string> scenesDict = new BiDictionary<SceneType, string>
     {
         {SceneType.Menu,  "Menu"},
         {SceneType.Main,  "Main"},

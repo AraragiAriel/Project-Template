@@ -15,5 +15,8 @@ MonoBehaviour:
   clip: {fileID: 0}
   volume: 1
   basePitch: 1
-  pitchType: 0
+  pitchType: 1
   customPitch: 0
+  delayType: 0
+  delayFrom: 0
+  delayTo: 0

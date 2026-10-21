@@ -14,33 +14,44 @@ public class ButtonTween : MonoBehaviour
     private Vector3 initialRot;
     private ButtonEvents events;
 
-    private void Awake(){
+    private void Awake()
+    {
         events = GetComponent<ButtonEvents>();
     }
 
-    private void OnEnable(){
+    private void OnEnable()
+    {
         events.OnSelect.AddListener(OnSelect);
         events.OnDeselect.AddListener(OnDeselect);
     }
 
-    private void OnDisable(){
+    private void OnDisable()
+    {
         events.OnSelect.RemoveListener(OnSelect);
         events.OnDeselect.RemoveListener(OnDeselect);
+
+        t.DOKill(true);
+        t.localScale = Vector3.one;
+        t.localEulerAngles = initialRot;
     }
 
-    private void Start(){
+    private void Start()
+    {
         initialRot = t.localEulerAngles;
     }
 
-    public void OnSelect(){
+    public void OnSelect()
+    {
         Tween(true);
     }
 
-    public void OnDeselect(){
+    public void OnDeselect()
+    {
         Tween(false);
     }
 
-    public void Tween(bool select){
+    public void Tween(bool select)
+    {
         t.DOKill(true);
         t.DOScale(select ? scale : 1f, duration).SetEase(ease);
         t.DOShakeRotation(duration, new Vector3(0f, 0f, shakeStr), randomnessMode: ShakeRandomnessMode.Harmonic).SetEase(ease).onComplete = () => 

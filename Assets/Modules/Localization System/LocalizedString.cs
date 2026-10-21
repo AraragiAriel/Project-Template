@@ -54,7 +54,7 @@ public class LanguageString
 {
     public GameLanguage language;
     [TextArea(3, 15)]
-    public string text;
+    public string text = "";
 
     public LanguageString(GameLanguage language)
     {
