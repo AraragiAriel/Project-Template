@@ -7,7 +7,8 @@ public class SfxTrigger : MonoBehaviour
     [SerializeField] private ClipsData clipsData;
     // [SerializeField] private bool atPosition = true;
 
-    public void Trigger(int index){
+    public void Trigger(int index)
+    {
         if(index >= clipsData.clips.Count || index < 0)
             return;
 

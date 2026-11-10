@@ -1,22 +1,13 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-public class StatsManager : MonoBehaviour
+public class StatsManager : Singleton<StatsManager>
 {
     private RID id = new();
 
-    private static StatsManager instance;
+    protected override void Setup()
+    {
+        base.Setup();
 
-    private void Awake(){
-        if(instance != null){
-            Destroy(gameObject);
-            return;
-        } else {
-            instance = this;
-            transform.SetParent(null);
-            DontDestroyOnLoad(gameObject);
-        }
-    
         Reset();
     }
 

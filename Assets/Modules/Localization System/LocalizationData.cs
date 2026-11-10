@@ -29,7 +29,7 @@ public class LocalizationData : ScriptableObject
         }
     }
 
-    private static readonly Regex LocTag = new
+    private static readonly Regex regex = new
     (
         @"<loc\s*=\s*(?<key>[^,>]+)(?:\s*,\s*field\s*=\s*(?<field>[^>]+))?>",
         RegexOptions.Compiled | RegexOptions.IgnoreCase
@@ -40,7 +40,7 @@ public class LocalizationData : ScriptableObject
         if(string.IsNullOrEmpty(s))
             return "";
             
-        return LocTag.Replace(s, match =>
+        return regex.Replace(s, match =>
         {
             var key = match.Groups["key"].Value.Trim();
             var field = match.Groups["field"].Success

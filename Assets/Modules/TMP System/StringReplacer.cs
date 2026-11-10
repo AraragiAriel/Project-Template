@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class StringReplacer
@@ -12,10 +13,18 @@ public class StringReplacer
             placeholders.Add(key, value);
     }
 
+    private static readonly Regex regex =
+        new(@"\{([^{}]*)\}");
+
     public string Replace(string s)
     {
-        foreach (var kvp in placeholders)
-            s = s.Replace("{" + kvp.Key + "}", kvp.Value);
-        return s;
+        return regex.Replace(s, match =>
+        {
+            string key = match.Groups[1].Value;
+
+            return placeholders.TryGetValue(key, out string value)
+                ? value
+                : match.Value;
+        });
     }
 }

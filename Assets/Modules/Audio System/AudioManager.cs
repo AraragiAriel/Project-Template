@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singleton<AudioManager>
 {
     // STATIC
-    private static AudioManager instance;
-
     public static void Play(ClipData data) => Play(new Parameters(data));
     public static void Play(Parameters parameters)
     {
@@ -35,19 +33,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSourceManager audioSourcePrefab;
     private List<AudioSourceManager> sources = new();
 
-    private void Awake()
+    protected override void Setup()
     {
-        if(instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        else
-        {
-            instance = this;
-            transform.parent = null;
-            DontDestroyOnLoad(gameObject);
-        }
+        base.Setup();
 
         for(int i = 0; i < initialAmount; i++)
             AddSource();

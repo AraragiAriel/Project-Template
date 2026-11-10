@@ -2,26 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeScaleManager : MonoBehaviour
+public class TimeScaleManager : Singleton<TimeScaleManager>
 {
-    public static TimeScaleManager instance;
-
     [SerializeField] private bool resetOnSceneChange;
 
     private List<Unit> units = new();
     private RID freezeID = new();
-
-    private void Awake()
-    {
-        if(instance != null){
-            Destroy(gameObject);
-            return;
-        } else {
-            transform.parent = null;
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-    }
 
     private void OnEnable()
     {

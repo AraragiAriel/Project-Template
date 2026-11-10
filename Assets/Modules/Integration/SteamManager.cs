@@ -2,71 +2,73 @@ using UnityEngine;
 using Steamworks;
 using System.Data.Common;
 
-public class SteamManager : MonoBehaviour
+public class SteamManager : Singleton<SteamManager>
 {
 #if !UNITY_WEBGL || UNITY_EDITOR
-    public static SteamManager instance;
+    [SerializeField] private UintData steamID;
     
     private bool logged = false;
 
-    private void Awake(){
-
 #if UNITY_EDITOR
-        if(Res.data.editorPreferences.disableSteam){
-            Destroy(gameObject);
-            return;
-        }
+    protected override bool Skip() => Res.data.editorPreferences.disableSteam;
 #endif
 
-        if(instance != null){
-            Destroy(gameObject);
-            return;
-        } else {
-            instance = this;
-            transform.SetParent(null);
-            DontDestroyOnLoad(gameObject);
-        }
+    protected override void Setup()
+    {
+        base.Setup();
 
-        try{
-            SteamClient.Init(StaticData.steamId);
+        try
+        {
+            SteamClient.Init(steamID);
             logged = true;
-        } catch {
+        }
+        catch
+        {
             Debug.LogWarning("couldnt initialize steam");
         }
     }
 
-    private void OnDisable(){
+    private void OnDisable()
+    {
         if(logged)
             SteamClient.Shutdown();
     }
 
-    private void Update(){
+    private void Update()
+    {
         if(logged)
             SteamClient.RunCallbacks();
     }
 
-    public bool CheckAchievement(string id){
+    public bool CheckAchievement(string id)
+    {
         if(!logged)
             return false;
+
         var achievement = GetAchievement(id);
         return achievement.State;
     }
 
-    public void TriggerAchievement(string id){
+    public void TriggerAchievement(string id)
+    {
         if(!logged)
             return;
+
         var achievement = GetAchievement(id);
         achievement.Trigger();
     }
 
-    public void ClearAchievement(string id){
+    public void ClearAchievement(string id)
+    {
         if(!logged)
             return;
+
         var achievement = GetAchievement(id);
         achievement.Clear();
     }
 
-    private Steamworks.Data.Achievement GetAchievement(string id){
+    private Steamworks.Data.Achievement GetAchievement(string id)
+    {
         return new Steamworks.Data.Achievement(id);
     }
 #endif

@@ -15,7 +15,7 @@ public enum SceneChangeAnimType
     None = 0,
 }
 
-public class SceneChanger : MonoBehaviour
+public class SceneChanger : Singleton<SceneChanger>
 {
     // STATIC
 
@@ -25,7 +25,6 @@ public class SceneChanger : MonoBehaviour
         {SceneType.Main,  "Main"},
     };
 
-    public static SceneChanger instance;
     public static SceneType currentScene;
 
     // INSTANCE
@@ -34,19 +33,9 @@ public class SceneChanger : MonoBehaviour
 
     [HideInInspector] public bool duringSceneChange = false;
 
-    private void Awake()
+    protected override void Setup()
     {
-        if(instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        else
-        {
-            instance = this;
-            transform.SetParent(null);
-            DontDestroyOnLoad(gameObject);
-        }
+        base.Setup();
 
         try
         {

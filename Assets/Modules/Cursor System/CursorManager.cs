@@ -1,26 +1,9 @@
 using UnityEngine;
 
-public class CursorManager : MonoBehaviour
+public class CursorManager : Singleton<CursorManager>
 {
-    private static CursorManager instance;
-
     [SerializeField] private Texture2D defaultSprite;
     [SerializeField] private Texture2D webSprite;
-
-    void Awake()
-    {
-        if(instance != null)
-        {
-            instance = this;
-            transform.SetParent(null);
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
 
     void Start()
     {

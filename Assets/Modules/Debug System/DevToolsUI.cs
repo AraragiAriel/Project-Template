@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class DevToolsUI : MonoBehaviour
 {
+    [SerializeField] private KeyCode toggleKey;
     [SerializeField] private RectTransform layout;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] DevToolLine prefab;
@@ -15,6 +16,12 @@ public class DevToolsUI : MonoBehaviour
     [SerializeField] private float pos;
 
     private bool open = false;
+
+    void Update()
+    {
+        if(Input.GetKeyDown(toggleKey))
+            Toggle();
+    }
 
     public void Setup(List<DevTools.Slot> slots)
     {

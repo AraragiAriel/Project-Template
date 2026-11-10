@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df6fc28a9d7d1f46b391506a8e05f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  discordID: {fileID: 11400000, guid: d9fe52e1ac73d2042b02f7fd71f40c9b, type: 2}

@@ -1,27 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AchievementManager : MonoBehaviour
+public class AchievementManager : Singleton<AchievementManager>
 {
-    public static AchievementManager instance;
-
-    // INSTANCE
     [SerializeField] private List<Achievement> achievements = new();
 
-    private void Awake(){
-        if(instance != null){
-            Destroy(gameObject);
-            return;
-        } else {
-            instance = this;
-            transform.SetParent(null);
-            DontDestroyOnLoad(gameObject);
-        }
-    }
-
-    private void Start(){
-        foreach(Achievement achievement in achievements){
-            if(Res.save.achievementSave.completed.Contains(achievement.id)){
+    private void Start()
+    {
+        foreach(Achievement achievement in achievements)
+        {
+            if(Res.save.achievementSave.completed.Contains(achievement.id))
+            {
                 Trigger(achievement.id);
                 continue;
             }
@@ -30,7 +19,8 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    public void Trigger(string id){
+    public void Trigger(string id)
+    {
         if(Res.data.demo)
             return;
             
@@ -40,7 +30,8 @@ public class AchievementManager : MonoBehaviour
 
         // Set to Steam
         if(!Res.data.demo)
-            if(SteamManager.instance != null){
+            if(SteamManager.instance != null)
+            {
                 if(!SteamManager.instance.CheckAchievement(id))
                     SteamManager.instance.TriggerAchievement(id);
             }

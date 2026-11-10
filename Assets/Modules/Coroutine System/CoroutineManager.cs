@@ -1,21 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class CoroutineManager : MonoBehaviour
+public class CoroutineManager : Singleton<CoroutineManager>
 {
-    public static CoroutineManager instance;
-
-    void Awake()
-    {
-        if(instance == null)
-        {
-            instance = this;
-            transform.SetParent(null);
-            DontDestroyOnLoad(gameObject);
-        } 
-        else
-        {
-            Destroy(gameObject);
-            return;    
-        }
-    }
 }

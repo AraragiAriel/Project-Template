@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(CanvasGroup))]
-public abstract class TooltipTween : MonoBehaviour
+public class TooltipTween : MonoBehaviour
 {
     private const float delay = .1f;
 
@@ -10,24 +10,25 @@ public abstract class TooltipTween : MonoBehaviour
     protected RectTransform rect => _tooltipRect ??= transform.GetChild(0).GetComponent<RectTransform>();
     private int order;
 
-    private CanvasGroup _canvasGroup;
-    protected CanvasGroup canvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
+    private TweenUse _tween;
+    private TweenUse tween => _tween ??= GetComponent<TweenUse>();
 
     public IEnumerator Select(int order)
     {
+        if(tween == null) yield break;
+
         this.order = order;
         yield return new WaitForEndOfFrame();
         yield return new WaitForSeconds(order*delay);
-        TweenIn();
+        yield return StartCoroutine(tween.Tween(TweenData.Type.Forward));
     }
 
     public IEnumerator Deselect()
     {
+        if(tween == null) yield break;
+
         yield return new WaitForEndOfFrame();
         yield return new WaitForSeconds(order*delay);
-        TweenOut();
+        yield return StartCoroutine(tween.Tween(TweenData.Type.Reverse));
     }
-
-    protected abstract void TweenIn();
-    protected abstract void TweenOut();
 }

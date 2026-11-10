@@ -1,76 +1,83 @@
 using System;
 using UnityEngine;
 
-public class DiscordManager : MonoBehaviour
+public class DiscordManager : Singleton<DiscordManager>
 {
-#if !UNITY_WEBGL || UNITY_EDITOR
-    private static DiscordManager instance;
-    
+#if !UNITY_WEBGL || UNITY_EDITOR    
+    [SerializeField] private LongData discordID;
     private Discord.Discord discord;
     private bool logged = false;
 
-    private void Awake(){
-
 #if UNITY_EDITOR
-        if(Res.data.editorPreferences.disableDiscord){
-            Destroy(gameObject);
-            return;
-        }
+    protected override bool Skip() => Res.data.editorPreferences.disableDiscord;
 #endif
 
-        if(instance != null){
-            Destroy(this.gameObject);
-            return;
-        } else {
-            instance = this;
-            transform.SetParent(null);
-            DontDestroyOnLoad(gameObject);
-        }
+    protected override void Setup()
+    {
+        base.Setup();
 
-        try{
-            discord = new Discord.Discord(StaticData.discordId, (ulong)Discord.CreateFlags.NoRequireDiscord);
+        try
+        {
+            discord = new Discord.Discord(discordID, (ulong)Discord.CreateFlags.NoRequireDiscord);
             logged = true;
-        } catch(Exception e){
+        }
+        catch(Exception e)
+        {
             logged = false;
             Debug.LogWarning("couldn't log into Discord: " + e.Message);
         }
     }
 
-    private void OnDisable(){
-        try{
+    private void OnDisable()
+    {
+        try
+        {
             if(logged)
                 discord.Dispose();
-        } catch(Exception e){
+        }
+        catch(Exception e)
+        {
             Debug.LogWarning("couldn't dispose Discord: " + e.Message);
         }
     }
 
     private void Start(){
-        try{
+        try
+        {
             if(logged)
                 SetActivity();
-        } catch(Exception e){
+        }
+        catch(Exception e)
+        {
             Debug.LogWarning("couldn't set Discord activity: " + e.Message);
         }
     }
 
     private void Update(){
-        try{
+        try
+        {
             if(logged)
                 discord.RunCallbacks();
-        } catch(Exception e){
+        }
+        catch(Exception e)
+        {
             Debug.LogWarning("Discord callback error: " + e.Message);
         }
     }
 
-    private void SetActivity(){
-        try{
+    private void SetActivity()
+    {
+        try
+        {
             var activityManager = discord.GetActivityManager();
-            var activity = new Discord.Activity{
+            var activity = new Discord.Activity
+            {
                 State = "Playing",
             };
             activityManager.UpdateActivity(activity, null);
-        } catch (Exception e){
+        }
+        catch (Exception e)
+        {
             Debug.LogWarning("Discord activity error: " + e.Message);
         }
     }

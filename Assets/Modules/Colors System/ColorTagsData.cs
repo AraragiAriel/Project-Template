@@ -54,7 +54,7 @@ public class ColorTagsData : ScriptableObject
 
     public Color GetContrast(Color color) => color.IsLight() ? GetDark() : GetLight();
 
-    private static readonly Regex MyColorTag = new
+    private static readonly Regex regex = new
     (
         @"<myColor\s*=\s*(?<key>[^>]+?)\s*>",
         RegexOptions.Compiled | RegexOptions.IgnoreCase
@@ -62,7 +62,7 @@ public class ColorTagsData : ScriptableObject
 
     public string Parse(string s)
     {
-        s = MyColorTag.Replace(s, match =>
+        s = regex.Replace(s, match =>
         {
             var key = match.Groups["key"].Value.Trim();
 

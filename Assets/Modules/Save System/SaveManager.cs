@@ -1,23 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
-public class SaveManager : MonoBehaviour
+public class SaveManager : Singleton<SaveManager>
 {
-    public static SaveManager instance {get; private set;}
-
-    private void Awake()
+    protected override void Setup()
     {
-        if(instance == null)
-        {
-            instance = this;
-            transform.SetParent(null);
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        base.Setup();
 
         Res.data.currentSave.saveContainer.Load();
     }

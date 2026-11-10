@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 public class Tooltip : MonoBehaviour
 {
@@ -90,9 +91,11 @@ public class Tooltip : MonoBehaviour
         tween.StartCoroutine(tween.Select(data.rects.Count - 1));
     }
 
-    public void Deselect()
+    public void Deselect() => StartCoroutine(DeselectCo());
+    private IEnumerator DeselectCo()
     {
         tween.StopAllCoroutines();
-        tween.StartCoroutine(tween.Deselect());
+        yield return tween.StartCoroutine(tween.Deselect());
+        Destroy(gameObject);
     }
 }

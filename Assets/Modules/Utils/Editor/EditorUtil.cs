@@ -68,18 +68,16 @@ public static class EditorUtil
             }
         GUILayout.EndHorizontal();
     }
-
-    public static List<T> AssetsList<T>(string path) where T : Object
+    
+    public static List<T> AssetsList<T>(string path = null) where T : Object
     {
         path = $"Assets/{path}";
 
-        string[] assetGuids = AssetDatabase.FindAssets("", new[] {path});
-        var assets = assetGuids
+        string[] assetGuids = AssetDatabase.FindAssets($"t:{typeof(T).Name}", new[] {path});
+        return assetGuids
             .Select(AssetDatabase.GUIDToAssetPath)
             .Select(AssetDatabase.LoadAssetAtPath<T>)
             .Where(asset => asset != null)
             .ToList();
-
-        return assets;
     }
 }

@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 8671434421473966913}
   - component: {fileID: 5415370757756057586}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Base Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254ee4378d11e6e489f4460c1fa197b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonStyler
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: ba06f9dd5d21a9647b9be9673ad749ec, type: 2}
 --- !u!114 &7950414697224510092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e271784cce012d144aa9807148c72505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  t: {fileID: 0}
+  t: {fileID: 3144357505162857356}
   duration: 0.1
   height: 0
   scale: 1.1

@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2409c5056c7d0de49877f4952868aa35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  steamID: {fileID: 11400000, guid: 98ed542dcbc8f0748917a63d5fe5f449, type: 2}

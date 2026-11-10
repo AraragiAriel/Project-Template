@@ -13,22 +13,28 @@ public class AudioSourceManager : MonoBehaviour
 
     public bool isPlaying{get{return audioSource.isPlaying;}}
 
-    private void OnEnable(){
+    private void OnEnable()
+    {
         StaticActions.OnSceneChange += OnSceneChange;
     }
 
-    private void OnDisable(){
+    private void OnDisable()
+    {
         StaticActions.OnSceneChange -= OnSceneChange;        
     }
 
-    public void Play(AudioManager.Parameters parameters){
+    public void Play(AudioManager.Parameters parameters)
+    {
         if(isPlaying)
             Debug.LogWarning("overwriting active audio source");
 
-        if(parameters.usePos){
+        if(parameters.usePos)
+        {
             transform.position = parameters.pos;
             audioSource.spatialBlend = spatialBlend;
-        } else {
+        }
+        else
+        {
             audioSource.spatialBlend = 0f;
         }
         audioSource.clip = parameters.data.clip;
@@ -38,7 +44,8 @@ public class AudioSourceManager : MonoBehaviour
         audioSource.Play();
     }
 
-    private void OnSceneChange(SceneType scene){
+    private void OnSceneChange(SceneType scene)
+    {
         audioSource.Stop();
     }
 }

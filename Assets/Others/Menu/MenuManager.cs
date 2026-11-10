@@ -13,7 +13,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Ease ease;
 
     [Header("Strings")]
-    [SerializeField] private string twitterLink;
+    [SerializeField] private StringData steamAppPage;
+    [SerializeField] private StringData steamWebPage;
 
     private void Start(){
         CloseAll(true);
@@ -71,10 +72,6 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void OpenTwitter(){
-        Application.OpenURL(twitterLink);
-    }
-
     public void QuitGame(){
         if(mainScreen.interactable){
             ConfirmationBox.OpenBox(new ConfirmationBox.Parameters(Res.data.localizationData.Get("Confirm Quit"), ConfirmQuit));
@@ -89,9 +86,9 @@ public class MenuManager : MonoBehaviour
 
     public void OpenSteamPage(){
         try{
-            Application.OpenURL(StaticData.steamAppPage);
+            Application.OpenURL(steamAppPage);
         } catch {
-            Application.OpenURL(StaticData.steamWebPage);
+            Application.OpenURL(steamWebPage);
         }
     }
 }

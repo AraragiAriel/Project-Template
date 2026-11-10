@@ -6,6 +6,9 @@ public class DevTools : MonoBehaviour
 {
     public enum ToolType
     {
+        Test1,
+        Test2,
+        Test3,
     }
 
     [Header("Tools")]
@@ -27,9 +30,18 @@ public class DevTools : MonoBehaviour
     {
         try
         {
-            // switch (type)
-            // {
-            // }
+            switch (type)
+            {
+                case ToolType.Test1:
+                    Util.Debug("test 1");
+                    break;
+                case ToolType.Test2:
+                    Util.Debug("test 2");
+                    break;
+                case ToolType.Test3:
+                    Util.Debug("test 3");
+                    break;
+            }
         }
         catch
         {

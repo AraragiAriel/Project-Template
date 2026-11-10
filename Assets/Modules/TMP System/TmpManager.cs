@@ -1,5 +1,6 @@
 using TMPro;
 using Odin.OdinSerializer.Utilities;
+using UnityEngine;
 
 public static class TmpManager
 {
@@ -18,13 +19,30 @@ public static class TmpManager
 
     public static string Parse(this string s, StringReplacer replacer = null)
     {
-        s = Res.data.localizationData.Parse(s);
-        if(replacer != null)
-            s = replacer.Replace(s);
-        s = Res.data.localizationData.Parse(s);
-        if(replacer != null)
-            s = replacer.Replace(s);
-        s = Res.data.colorTags.Parse(s);
+        int iterations = 0;
+        while (true)
+        {
+            string starting = s;
+
+            if (s.Contains("<loc="))
+                s = Res.data.localizationData.Parse(s);
+
+            if (replacer != null && s.Contains("{"))
+                s = replacer.Replace(s);
+
+            if (s.Contains("<myColor="))
+                s = Res.data.colorTags.Parse(s);
+
+            if(string.Equals(starting, s))
+                break;
+
+            iterations++;
+            if(iterations > 50)
+            {
+                Debug.LogWarning($"Parsing reached {iterations} iterations");
+                break;
+            }
+        }
         return s;
     }
 }
